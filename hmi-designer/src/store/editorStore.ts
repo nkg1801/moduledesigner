@@ -52,6 +52,8 @@ interface EditorState {
 export interface HMIDocument {
     id: string;
     name: string;
+    shapes: ShapeModel[];
+    connections: ConnectionModel[];
 }
 
 export type ShapeType =
@@ -78,6 +80,14 @@ export type ShapeType =
     | "heatExchanger"
     | "vessel";
 
+    function getCurrentHmi(state: EditorState) {
+        return state.hmis.find(
+            (hmi) =>
+                hmi.id === state.selectedHmiId
+        );
+    }
+
+// this is zustland store for the editor state, including shapes, connections, and selection state
 export const useEditorStore = create<EditorState>(
     (set) => ({
         shapes: [
@@ -93,6 +103,8 @@ export const useEditorStore = create<EditorState>(
             {
                 id: "hmi-1",
                 name: "HMI_1",
+                shapes: [],
+                connections: [],
             },
         ],
 
@@ -307,7 +319,31 @@ export const useEditorStore = create<EditorState>(
                     ];
                 }
 
-                return {
+                const newShape = {
+                    id,
+                    name: definition.displayName + count,
+                    eClassId: definition.eClassId,
+                    amlType: definition.amlType,
+                    refBaseSystemUnitPath:
+                        definition.refBaseSystemUnitPath,
+                    imageSrc: definition.imageSrc,
+                    type,
+                    x,
+                    y,
+                    width: definition.width,
+                    height: definition.height,
+                    fill: definition.fill,
+                    ports,
+                };
+
+                const currentHmi =
+                    getCurrentHmi(state);
+
+                if (!currentHmi) {
+                    return {};
+                }
+
+                /*return {
                     shapes: [
                         ...state.shapes,
                         {
@@ -326,13 +362,48 @@ export const useEditorStore = create<EditorState>(
                             ports,
                         },
                     ],
+                };*/
+
+                console.log(
+                    "Adding shape to:",
+                    currentHmi.name
+                );
+
+                /*return {
+                    hmis: state.hmis.map((hmi) =>
+                        hmi.id === state.selectedHmiId
+                            ? {
+                                ...hmi,
+                                shapes: [
+                                    ...hmi.shapes,
+                                    newShape,
+                                ],
+                            }
+                            : hmi
+                    ),
+                };*/
+
+                return {
+                    shapes: [
+                        ...state.shapes,
+                        newShape,
+                    ],
+
+                    hmis: state.hmis.map((hmi) =>
+                        hmi.id === state.selectedHmiId
+                            ? {
+                                ...hmi,
+                                shapes: [
+                                    ...hmi.shapes,
+                                    newShape,
+                                ],
+                            }
+                            : hmi
+                    ),
                 };
             }),
 
-        updateShapeProperties: (
-            id,
-            properties
-        ) =>
+        updateShapeProperties: (id,properties) =>
             set((state) => ({
                 shapes: state.shapes.map((shape) =>
                     shape.id === id
@@ -487,6 +558,11 @@ export const useEditorStore = create<EditorState>(
 
         addHmi: () =>
             set((state) => {
+
+                console.log(
+                    "Current HMI count:",
+                    state.hmis.length
+                );
                 const count =
                     state.hmis.length + 1;
 
@@ -499,6 +575,8 @@ export const useEditorStore = create<EditorState>(
                         {
                             id,
                             name: `HMI_${count}`,
+                            shapes: [],
+                            connections: [],
                         },
                     ],
 

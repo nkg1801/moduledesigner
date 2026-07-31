@@ -11,7 +11,21 @@ import ConnectionLayer from "../components/ConnectionLayer";
 
 export default function DesignerCanvas() {
 
-    const shapes = useEditorStore((state) => state.shapes);
+    //const shapes = useEditorStore((state) => state.shapes);
+
+    const shapes =
+        useEditorStore((state) => {
+
+            const currentHmi =
+                state.hmis.find(
+                    (hmi) =>
+                        hmi.id ===
+                        state.selectedHmiId
+                );
+
+            return currentHmi?.shapes ?? [];
+        });
+
     const clearSelection =
         useEditorStore(
             (state) => state.clearSelection
@@ -150,8 +164,9 @@ export default function DesignerCanvas() {
         >
 
             <Stage
-                width={window.innerWidth - 500}
-                height={window.innerHeight - 230}
+                // canvas width and height are set to the window size minus some offset for UI elements
+                width={window.innerWidth - 950}
+                height={window.innerHeight - 120}
                 onWheel={handleWheel}
 
                 onMouseDown={(e) => {

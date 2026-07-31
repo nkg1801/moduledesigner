@@ -7,6 +7,9 @@ import useDeleteKey from "./hooks/useDeleteKey";
 import PropertyInspector from "./components/PropertyInspector";
 import ShapePalette from "./components/ShapePalette";
 import { useEffect } from "react";
+import ProjectExplorer from "./components/ProjectExplorer";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 
 function App() {
 
@@ -19,6 +22,10 @@ function App() {
     const connections = useEditorStore((state) => state.connections);
     const selectedShape = shapes.find((shape) => selectedShapeIds.includes(shape.id));
     const clearSelectedPorts = useEditorStore((state) => state.clearSelectedPorts);
+    const hmis = useEditorStore((state) => state.hmis);
+    const selectedHmiId = useEditorStore((state) => state.selectedHmiId);
+    const selectHmi = useEditorStore((state) => state.selectHmi);
+    const addHmi = useEditorStore((state) => state.addHmi);
 
     useEffect(() => {
 
@@ -239,16 +246,26 @@ ${s.ports?.map(
                 }}
             >
                 {/* Project Explorer */}
+
                 <Box
                     sx={{
                         width: 250,
                         borderRight: "1px solid #ddd",
                         p: 1,
-                    }}>
-                    <Typography variant="subtitle1">
+                    }}
+                >
+
+                    <Typography
+                        variant="subtitle1"
+                        sx={{ mb: 1 }}
+                    >
                         Project Explorer
                     </Typography>
+
+                    <ProjectExplorer />
+
                 </Box>
+
 
                 {/* Shape Library */}
                 <Box
@@ -290,28 +307,85 @@ ${s.ports?.map(
 
                 </Box>
 
-                {/* Canvas */}
+                {/* Canvas Area */}
                 <Box
                     sx={{
                         flex: 1,
-                        bgcolor: "#fafafa",
+                        display: "flex",
+                        flexDirection: "column",
                     }}
                 >
-                    <DesignerCanvas />
 
-                    {/* Property Panel */}
-                    <Box
+                    {/* HMI Tabs */}
+                    <Tabs
+                        value={selectedHmiId}
+                        onChange={(_, value) =>
+                            selectHmi(value)
+                        }
                         sx={{
-                            width: 1200,
-                            borderLeft: "2px solid #bdbdbd",
-                            backgroundColor: "#fafadf",
-                            boxShadow: "-2px 0 4px rgba(0,0,0,0.08)",
-                            p: 1,
-                            overflowY: "auto",
+                            borderBottom: "1px solid #ddd",
+                            backgroundColor: "white",
                         }}
                     >
-                        <PropertyInspector />
+                        {hmis.map((hmi) => (
+                            <Tab
+                                key={hmi.id}
+                                value={hmi.id}
+                                label={hmi.name}
+                            />
+                        ))}
+
+                        <Tab
+                            label="+"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                addHmi();
+                            }}
+                        />
+                    </Tabs>
+
+                    {/* Canvas + Properties Split */}
+                    <Box
+                        sx={{
+                            flex: 1,
+                            display: "flex",
+                            minHeight: 0,
+                        }}
+                    >
+                        {/* Canvas */}
+                        <Box
+                            sx={{
+                                flex: 1,
+                                bgcolor: "#fafafa",
+                            }}
+                        >
+                            <DesignerCanvas />
+                        </Box>
+
+                        {/* Property Panel */}
+                        <Box
+                            sx={{
+                                width: 400,
+
+                                borderLeft:
+                                    "2px solid #bdbdbd",
+
+                                backgroundColor:
+                                    "#fafadf",
+
+                                boxShadow:
+                                    "-2px 0 4px rgba(0,0,0,0.08)",
+
+                                p: 1,
+
+                                overflowY: "auto",
+                            }}
+                        >
+                            <PropertyInspector />
+                        </Box>
+
                     </Box>
+
                 </Box>
             </Box>
         </Box>
