@@ -78,10 +78,16 @@ function App() {
 
     const exportXml = () => {
         const xml = `<Project>
-            <InstanceHierarchy Name="HMI">
+            <InstanceHierarchy Name="Project">
 
-            ${shapes
-                .map(
+            ${hmis.map(
+                (hmi) => `
+
+        <InternalElement
+            Name="${hmi.name}"
+            ID="${hmi.id}">
+
+        ${hmi.shapes.map(
                     (s) => `
   <InternalElement
     Name="${s.name}"
@@ -183,14 +189,16 @@ ${s.ports?.map(
   </InternalElement>`
                 ).join("\n")}
 
-            ${connections.map((c, index) => `
+            ${hmi.connections.map(
+                (c, index) => `
     <InternalLink
         Name="Link_${index + 1}"
-       RefPartnerSideA="${c.sourcePortId}_IF"
+        RefPartnerSideA="${c.sourcePortId}_IF"
         RefPartnerSideB="${c.targetPortId}_IF"
-        />`
-                )
-                .join("\n")}
+    />`
+                ).join("\n")}
+            </InternalElement>
+            `).join("\n")}
 
 </InstanceHierarchy>
 </Project>
@@ -226,7 +234,7 @@ ${s.ports?.map(
                 }}
             >
                 <Typography variant="h6">
-                    Module Designer for Freelance Engineering 2027
+                    Module Designer for Freelance Engineering 2047
                 </Typography>
 
                 <Button
@@ -338,8 +346,20 @@ ${s.ports?.map(
                         <Tab
                             label="+"
                             onClick={(e) => {
+
                                 e.preventDefault();
-                                addHmi();
+
+                                const name =
+                                    prompt(
+                                        "New HMI Name",
+                                        `HMI_${hmis.length + 1}`
+                                    );
+
+                                if (!name) {
+                                    return;
+                                }
+
+                                addHmi(name);
                             }}
                         />
                     </Tabs>

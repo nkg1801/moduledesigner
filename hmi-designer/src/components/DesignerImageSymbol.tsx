@@ -1,16 +1,7 @@
 import { useEffect, useRef } from "react";
 import Konva from "konva";
-
-import {
-    Image,
-    Transformer,
-    Text,
-    Circle as KonvaCircle,
-    Group,
-} from "react-konva";
-
+import {Image, Transformer, Text, Circle as KonvaCircle, Group,} from "react-konva";
 import useImage from "use-image";
-
 import { ShapeModel } from "../types/Shape";
 import { useEditorStore } from "../store/editorStore";
 
@@ -41,6 +32,8 @@ export default function DesignerImageSymbol({
                 state.selectShape
         );
 
+    const shapes = useEditorStore((state) => state.shapes);
+
     const selectPort =
         useEditorStore(
             (state) =>
@@ -54,15 +47,35 @@ export default function DesignerImageSymbol({
         );
 
     const connections =
-        useEditorStore(
-            (state) =>
-                state.connections
-        );
+        useEditorStore((state) => {
+            const currentHmi =
+                state.hmis.find(
+                    (hmi) =>
+                        hmi.id ===
+                        state.selectedHmiId
+                );
+
+            return (
+                currentHmi?.connections ?? []
+            );
+        });
 
     const updateShapePosition =
         useEditorStore(
             (state) =>
                 state.updateShapePosition
+        );
+
+    const dragStartRef =
+        useRef<Record<
+            string,
+            { x: number; y: number }
+        >>({});
+
+    const updateMultipleShapePositions =
+        useEditorStore(
+            (state) =>
+                state.updateMultipleShapePositions
         );
 
     const updateShapeSize =
@@ -77,12 +90,7 @@ export default function DesignerImageSymbol({
         );
 
     useEffect(() => {
-
-        if (
-            isSelected &&
-            trRef.current &&
-            imageRef.current
-        ) {
+        if (isSelected && trRef.current && imageRef.current) {
             trRef.current.nodes([
                 imageRef.current
             ]);
@@ -117,13 +125,73 @@ export default function DesignerImageSymbol({
                         e.evt.ctrlKey
                     )
                 }
-                onDragEnd={(e) =>
+
+                onDragEnd={(e) => {
                     updateShapePosition(
                         shape.id,
                         e.target.x(),
                         e.target.y()
-                    )
-                }
+                    );
+
+                    dragStartRef.current = {};
+                }}
+
+                onDragStart={() => {
+                    dragStartRef.current =
+                        Object.fromEntries(
+                            shapes
+                                .filter((s) =>
+                                    selectedShapeIds.includes(
+                                        s.id
+                                    )
+                                )
+                                .map((s) => [
+                                    s.id,
+                                    {
+                                        x: s.x,
+                                        y: s.y,
+                                    },
+                                ])
+                        );
+                }}
+
+                onDragMove={(e) => {
+                    if (selectedShapeIds.length <= 1) {
+                        return;
+                    }
+
+                    const draggedX = e.target.x();
+                    const draggedY = e.target.y();
+
+                    const dx = draggedX - shape.x;
+                    const dy = draggedY - shape.y;
+
+                    const updates = selectedShapeIds
+                        .filter((id) => id !== shape.id)
+                        .map((id) => {
+                            const start = dragStartRef.current[id];
+
+                            if (!start) return null;
+
+                            return {
+                                id,
+                                x: start.x + dx,
+                                y: start.y + dy,
+                            };
+                        })
+                        .filter(
+                            (
+                                update
+                            ): update is {
+                                id: string;
+                                x: number;
+                                y: number;
+                            } => update !== null
+                        );
+
+                    updateMultipleShapePositions(updates);
+                }}
+
                 onTransformEnd={() => {
 
                     const node =

@@ -1,9 +1,9 @@
 ﻿import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FolderIcon from "@mui/icons-material/Folder";
-import DescriptionIcon from "@mui/icons-material/Description";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+//import DescriptionIcon from "@mui/icons-material/Description";
+//import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+//import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useEditorStore } from "../store/editorStore";
 
 export default function ProjectExplorer() {
@@ -21,6 +21,18 @@ export default function ProjectExplorer() {
     const selectHmi =
         useEditorStore(
             (state) => state.selectHmi
+        );
+
+    const renameHmi =
+        useEditorStore(
+            (state) =>
+                state.renameHmi
+        );
+
+    const deleteHmi =
+        useEditorStore(
+            (state) =>
+                state.deleteHmi
         );
 
     return (
@@ -54,6 +66,39 @@ export default function ProjectExplorer() {
                         onClick={() =>
                             selectHmi(hmi.id)
                         }
+
+                        onContextMenu={(e) => {
+                            e.preventDefault();
+                            if (hmis.length === 1) {
+                                alert("At least one HMI must exist.");
+                                return;
+                            }
+
+                            const confirmDelete = window.confirm(`Delete ${hmi.name}?`);
+                            if (confirmDelete) {
+                                deleteHmi(hmi.id);
+                            }
+                        }}
+
+                        onDoubleClick={() => {
+
+                            const newName =
+                                prompt(
+                                    "HMI Name",
+                                    hmi.name
+                                );
+
+                            if (
+                                newName &&
+                                newName.trim()
+                            ) {
+                                renameHmi(
+                                    hmi.id,
+                                    newName.trim()
+                                );
+                            }
+                        }}
+
                         sx={{
                             ml: 2,
                             mt: 0.5,

@@ -3,22 +3,6 @@
   "WorkspaceRootPath": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\DesignerTank.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:components\\DesignerTank.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\DesignerRect.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:components\\DesignerRect.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\DesignerCircle.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:components\\DesignerCircle.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\App.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:App.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\store\\editorStore.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:store\\editorStore.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     },
@@ -27,32 +11,40 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:components\\ConnectionLayer.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\PropertyInspector.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:components\\PropertyInspector.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\canvas\\DesignerCanvas.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:canvas\\DesignerCanvas.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\types\\Connection.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:types\\Connection.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\types\\Port.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:types\\Port.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\ShapePalette.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:components\\ShapePalette.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\types\\Shape.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:types\\Shape.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\App.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:App.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\shapes\\shapeRegistry.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:shapes\\shapeRegistry.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\PropertyInspector.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:components\\PropertyInspector.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\types\\Shape.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:types\\Shape.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\ShapePalette.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:components\\ShapePalette.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\types\\Connection.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:types\\Connection.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\ShapeRenderer.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:components\\ShapeRenderer.tsx||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\types\\Port.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:types\\Port.ts||{0F2454B1-A556-402D-A7D0-1FDE7F99DEE0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -62,115 +54,146 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ShapeRenderer.tsx",
+              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\ShapeRenderer.tsx",
+              "RelativeDocumentMoniker": "components\\ShapeRenderer.tsx",
+              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\ShapeRenderer.tsx",
+              "RelativeToolTip": "components\\ShapeRenderer.tsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-07-30T14:19:34.002Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "ConnectionLayer.tsx",
-              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\ConnectionLayer.tsx",
-              "RelativeDocumentMoniker": "components\\ConnectionLayer.tsx",
-              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\ConnectionLayer.tsx",
-              "RelativeToolTip": "components\\ConnectionLayer.tsx",
-              "ViewState": "AgIAACsAAAAAAAAAAAAAwEsAAAAlAAAAAAAAAA==",
+              "Title": "shapeRegistry.ts",
+              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\shapes\\shapeRegistry.ts",
+              "RelativeDocumentMoniker": "shapes\\shapeRegistry.ts",
+              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\shapes\\shapeRegistry.ts",
+              "RelativeToolTip": "shapes\\shapeRegistry.ts",
+              "ViewState": "AgIAACAAAAAAAAAAAAAAwDMAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-07-28T13:35:24.599Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "App.tsx",
-              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\App.tsx",
-              "RelativeDocumentMoniker": "App.tsx",
-              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\App.tsx",
-              "RelativeToolTip": "App.tsx",
-              "ViewState": "AgIAAHEAAAAAAAAAAAAAAIoAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-07-28T02:00:04.535Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "editorStore.ts",
-              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\store\\editorStore.ts",
-              "RelativeDocumentMoniker": "store\\editorStore.ts",
-              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\store\\editorStore.ts",
-              "RelativeToolTip": "store\\editorStore.ts",
-              "ViewState": "AgIAAOYAAAAAAAAAAAAAAKEBAAAPAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-07-28T02:16:53.377Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "DesignerRect.tsx",
-              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\DesignerRect.tsx",
-              "RelativeDocumentMoniker": "components\\DesignerRect.tsx",
-              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\DesignerRect.tsx",
-              "RelativeToolTip": "components\\DesignerRect.tsx",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-07-28T02:32:39.387Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "DesignerCircle.tsx",
-              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\DesignerCircle.tsx",
-              "RelativeDocumentMoniker": "components\\DesignerCircle.tsx",
-              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\DesignerCircle.tsx",
-              "RelativeToolTip": "components\\DesignerCircle.tsx",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-07-28T02:39:19.382Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "DesignerTank.tsx",
-              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\DesignerTank.tsx",
-              "RelativeDocumentMoniker": "components\\DesignerTank.tsx",
-              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\DesignerTank.tsx",
-              "RelativeToolTip": "components\\DesignerTank.tsx",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-07-28T02:39:54.279Z",
+              "WhenOpened": "2026-07-28T09:26:41.104Z",
+              "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
+              "Title": "Shape.ts",
+              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\types\\Shape.ts",
+              "RelativeDocumentMoniker": "types\\Shape.ts",
+              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\types\\Shape.ts",
+              "RelativeToolTip": "types\\Shape.ts",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-07-28T02:19:25.136Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "DesignerCanvas.tsx",
               "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\canvas\\DesignerCanvas.tsx",
               "RelativeDocumentMoniker": "canvas\\DesignerCanvas.tsx",
               "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\canvas\\DesignerCanvas.tsx",
               "RelativeToolTip": "canvas\\DesignerCanvas.tsx",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAuwBYAAAA5AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
               "WhenOpened": "2026-07-28T10:56:49.906Z",
+              "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 0,
+              "Title": "editorStore.ts",
+              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\store\\editorStore.ts",
+              "RelativeDocumentMoniker": "store\\editorStore.ts",
+              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\store\\editorStore.ts",
+              "RelativeToolTip": "store\\editorStore.ts",
+              "ViewState": "AgIAAOQBAAAAAAAAAAAvwOgBAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-07-28T02:16:53.377Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "Connection.ts",
               "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\types\\Connection.ts",
               "RelativeDocumentMoniker": "types\\Connection.ts",
               "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\types\\Connection.ts",
               "RelativeToolTip": "types\\Connection.ts",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAgAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
               "WhenOpened": "2026-07-28T13:24:59.242Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 7,
+              "Title": "ShapePalette.tsx",
+              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\ShapePalette.tsx",
+              "RelativeDocumentMoniker": "components\\ShapePalette.tsx",
+              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\ShapePalette.tsx",
+              "RelativeToolTip": "components\\ShapePalette.tsx",
+              "ViewState": "AgIAABUAAAAAAAAAAAAvwDEAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-07-28T11:01:02.491Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PropertyInspector.tsx",
+              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\PropertyInspector.tsx",
+              "RelativeDocumentMoniker": "components\\PropertyInspector.tsx",
+              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\PropertyInspector.tsx",
+              "RelativeToolTip": "components\\PropertyInspector.tsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-07-28T03:41:44.758Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ConnectionLayer.tsx",
+              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\ConnectionLayer.tsx",
+              "RelativeDocumentMoniker": "components\\ConnectionLayer.tsx",
+              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\ConnectionLayer.tsx",
+              "RelativeToolTip": "components\\ConnectionLayer.tsx",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-07-28T13:35:24.599Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "App.tsx",
+              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\App.tsx",
+              "RelativeDocumentMoniker": "App.tsx",
+              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\App.tsx",
+              "RelativeToolTip": "App.tsx",
+              "ViewState": "AgIAAGIBAAAAAAAAAAAvwG8BAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
+              "WhenOpened": "2026-07-28T02:00:04.535Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "Port.ts",
               "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\types\\Port.ts",
               "RelativeDocumentMoniker": "types\\Port.ts",
@@ -179,58 +202,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
               "WhenOpened": "2026-07-28T12:57:56.582Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "ShapePalette.tsx",
-              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\ShapePalette.tsx",
-              "RelativeDocumentMoniker": "components\\ShapePalette.tsx",
-              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\ShapePalette.tsx",
-              "RelativeToolTip": "components\\ShapePalette.tsx",
-              "ViewState": "AgIAACcAAAAAAAAAAAAAwC0AAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-07-28T11:01:02.491Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "Shape.ts",
-              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\types\\Shape.ts",
-              "RelativeDocumentMoniker": "types\\Shape.ts",
-              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\types\\Shape.ts",
-              "RelativeToolTip": "types\\Shape.ts",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-07-28T02:19:25.136Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "shapeRegistry.ts",
-              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\shapes\\shapeRegistry.ts",
-              "RelativeDocumentMoniker": "shapes\\shapeRegistry.ts",
-              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\shapes\\shapeRegistry.ts",
-              "RelativeToolTip": "shapes\\shapeRegistry.ts",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-07-28T09:26:41.104Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "PropertyInspector.tsx",
-              "DocumentMoniker": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\PropertyInspector.tsx",
-              "RelativeDocumentMoniker": "components\\PropertyInspector.tsx",
-              "ToolTip": "C:\\work\\ModuleDesignerBrowser\\hmi-designer\\src\\components\\PropertyInspector.tsx",
-              "RelativeToolTip": "components\\PropertyInspector.tsx",
-              "ViewState": "AgIAAIkAAAAAAAAAAAAYwKsAAAAOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003213|",
-              "WhenOpened": "2026-07-28T03:41:44.758Z",
               "EditorCaption": ""
             }
           ]

@@ -3,10 +3,20 @@ import { Line } from "react-konva";
 import { useEditorStore } from "../store/editorStore";
 
 export default function ConnectionLayer() {
-  const connections =
-    useEditorStore(
-      (state) => state.connections
-    );
+    const connections =
+        useEditorStore((state) => {
+
+            const currentHmi =
+                state.hmis.find(
+                    (hmi) =>
+                        hmi.id ===
+                        state.selectedHmiId
+                );
+
+            return (
+                currentHmi?.connections ?? []
+            );
+        });
 
   const shapes =
     useEditorStore(

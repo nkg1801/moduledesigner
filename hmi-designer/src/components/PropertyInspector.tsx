@@ -12,9 +12,17 @@ export default function PropertyInspector() {
         );
 
     const shapes =
-        useEditorStore(
-            (state) => state.shapes
-        );
+        useEditorStore((state) => {
+
+            const currentHmi =
+                state.hmis.find(
+                    (hmi) =>
+                        hmi.id ===
+                        state.selectedHmiId
+                );
+
+            return currentHmi?.shapes ?? [];
+        });
 
     const updateShapeProperties =
         useEditorStore(

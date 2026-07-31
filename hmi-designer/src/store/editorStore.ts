@@ -12,8 +12,6 @@ interface EditorState {
     selectedPortIds: string[];
     selectedConnectionId: string | null;
 
-
-
     selectConnection: (connectionId: string | null) => void;
     deleteSelectedConnection: () => void;
     clearSelectedPorts: () => void;
@@ -27,7 +25,7 @@ interface EditorState {
     deleteSelectedShape: () => void;
     updateShapeProperties: (id: string, properties: Partial<ShapeModel>) => void;
     addShape: (type: ShapeType, x: number, y: number) => void;
-
+    
 
     updateMultipleShapePositions: (updates: {
             id: string;
@@ -45,8 +43,10 @@ interface EditorState {
 
     hmis: HMIDocument[];
     selectedHmiId: string;
-    addHmi: () => void;
+    addHmi: (name?: string) => void;
     selectHmi: (id: string) => void;
+    renameHmi: (id: string, name: string) => void;
+    deleteHmi: (id: string) => void;
 }
 
 export interface HMIDocument {
@@ -165,6 +165,7 @@ export const useEditorStore = create<EditorState>(
 
         updateShapePosition: (id, x, y) => {
             set((state) => ({
+
                 shapes: state.shapes.map((shape) =>
                     shape.id === id
                         ? {
@@ -173,6 +174,25 @@ export const useEditorStore = create<EditorState>(
                             y,
                         }
                         : shape
+                ),
+
+                hmis: state.hmis.map((hmi) =>
+                    hmi.id === state.selectedHmiId
+                        ? {
+                            ...hmi,
+
+                            shapes: hmi.shapes.map(
+                                (shape) =>
+                                    shape.id === id
+                                        ? {
+                                            ...shape,
+                                            x,
+                                            y,
+                                        }
+                                        : shape
+                            ),
+                        }
+                        : hmi
                 ),
             }));
         },
@@ -416,19 +436,68 @@ export const useEditorStore = create<EditorState>(
             })),
 
         deleteSelectedShape: () =>
-            set((state) => ({
-                shapes: state.shapes.filter(
-                    (shape) =>
-                        !state.selectedShapeIds.includes(
-                            shape.id
-                        )
-                ),
-                selectedShapeIds: [],
-            })),
+            set((state) => {
+
+                const deletedIds =
+                    state.selectedShapeIds;
+
+                return {
+
+                    // Keep global arrays in sync for now
+                    shapes: state.shapes.filter(
+                        (shape) =>
+                            !deletedIds.includes(
+                                shape.id
+                            )
+                    ),
+
+                    connections:
+                        state.connections.filter(
+                            (connection) =>
+                                !deletedIds.includes(
+                                    connection.sourceShapeId
+                                ) &&
+                                !deletedIds.includes(
+                                    connection.targetShapeId
+                                )
+                        ),
+
+                    hmis: state.hmis.map((hmi) =>
+                        hmi.id ===
+                            state.selectedHmiId
+                            ? {
+                                ...hmi,
+
+                                shapes:
+                                    hmi.shapes.filter(
+                                        (shape) =>
+                                            !deletedIds.includes(
+                                                shape.id
+                                            )
+                                    ),
+
+                                connections:
+                                    hmi.connections.filter(
+                                        (connection) =>
+                                            !deletedIds.includes(
+                                                connection.sourceShapeId
+                                            ) &&
+                                            !deletedIds.includes(
+                                                connection.targetShapeId
+                                            )
+                                    ),
+                            }
+                            : hmi
+                    ),
+
+                    selectedShapeIds: [],
+                };
+            }),
 
 
         updateShapeSize: (id, width, height) =>
             set((state) => ({
+
                 shapes: state.shapes.map((shape) => {
 
                     if (shape.id !== id) {
@@ -464,12 +533,55 @@ export const useEditorStore = create<EditorState>(
                         ports: updatedPorts,
                     };
                 }),
+
+                hmis: state.hmis.map((hmi) =>
+                    hmi.id === state.selectedHmiId
+                        ? {
+                            ...hmi,
+
+                            shapes: hmi.shapes.map((shape) => {
+
+                                if (shape.id !== id) {
+                                    return shape;
+                                }
+
+                                const updatedPorts =
+                                    shape.ports?.map((port) => {
+
+                                        if (port.name === "N0") {
+                                            return {
+                                                ...port,
+                                                offsetX: 0,
+                                                offsetY: height * 0.6,
+                                            };
+                                        }
+
+                                        if (port.name === "N1") {
+                                            return {
+                                                ...port,
+                                                offsetX: width,
+                                                offsetY: height * 0.6,
+                                            };
+                                        }
+
+                                        return port;
+                                    });
+
+                                return {
+                                    ...shape,
+                                    width,
+                                    height,
+                                    ports: updatedPorts,
+                                };
+                            }),
+                        }
+                        : hmi
+                ),
             })),
 
-        updateMultipleShapePositions: (
-            updates
-        ) =>
+        updateMultipleShapePositions: (updates) =>
             set((state) => ({
+
                 shapes: state.shapes.map(
                     (shape) => {
                         const update =
@@ -487,8 +599,46 @@ export const useEditorStore = create<EditorState>(
                             x: update.x,
                             y: update.y,
                         };
-
                     }
+                ),
+
+                hmis: state.hmis.map(
+                    (hmi) =>
+                        hmi.id ===
+                            state.selectedHmiId
+                            ? {
+                                ...hmi,
+
+                                shapes:
+                                    hmi.shapes.map(
+                                        (
+                                            shape
+                                        ) => {
+
+                                            const update =
+                                                updates.find(
+                                                    (
+                                                        u
+                                                    ) =>
+                                                        u.id ===
+                                                        shape.id
+                                                );
+
+                                            if (
+                                                !update
+                                            ) {
+                                                return shape;
+                                            }
+
+                                            return {
+                                                ...shape,
+                                                x: update.x,
+                                                y: update.y,
+                                            };
+                                        }
+                                    ),
+                            }
+                            : hmi
                 ),
             })),
 
@@ -509,7 +659,15 @@ export const useEditorStore = create<EditorState>(
                     return {};
                 }
 
-                return {
+                const newConnection = {
+                    id: crypto.randomUUID(),
+                    sourceShapeId,
+                    sourcePortId,
+                    targetShapeId,
+                    targetPortId,
+                };
+
+                /*return {
                     connections: [
                         ...state.connections,
                         {
@@ -520,6 +678,25 @@ export const useEditorStore = create<EditorState>(
                             targetPortId,
                         },
                     ],
+                };*/
+
+                return {
+                    connections: [
+                        ...state.connections,
+                        newConnection,
+                    ],
+
+                    hmis: state.hmis.map((hmi) =>
+                        hmi.id === state.selectedHmiId
+                            ? {
+                                ...hmi,
+                                connections: [
+                                    ...hmi.connections,
+                                    newConnection,
+                                ],
+                            }
+                            : hmi
+                    ),
                 };
             }),
 
@@ -538,12 +715,31 @@ export const useEditorStore = create<EditorState>(
                 }
 
                 return {
+
+                    // Keep global list in sync for now
                     connections:
                         state.connections.filter(
                             (c) =>
                                 c.id !==
                                 state.selectedConnectionId
                         ),
+
+                    hmis: state.hmis.map(
+                        (hmi) =>
+                            hmi.id ===
+                                state.selectedHmiId
+                                ? {
+                                    ...hmi,
+
+                                    connections:
+                                        hmi.connections.filter(
+                                            (c) =>
+                                                c.id !==
+                                                state.selectedConnectionId
+                                        ),
+                                }
+                                : hmi
+                    ),
 
                     selectedConnectionId:
                         null,
@@ -556,13 +752,9 @@ export const useEditorStore = create<EditorState>(
             }),
 
 
-        addHmi: () =>
+        addHmi: (name) =>
             set((state) => {
 
-                console.log(
-                    "Current HMI count:",
-                    state.hmis.length
-                );
                 const count =
                     state.hmis.length + 1;
 
@@ -574,7 +766,10 @@ export const useEditorStore = create<EditorState>(
                         ...state.hmis,
                         {
                             id,
-                            name: `HMI_${count}`,
+                            name:
+                                name?.trim() ||
+                                `HMI_${count}`,
+
                             shapes: [],
                             connections: [],
                         },
@@ -588,5 +783,39 @@ export const useEditorStore = create<EditorState>(
             set({
                 selectedHmiId: id,
             }),
+        renameHmi: (
+            id,
+            name
+        ) =>
+            set((state) => ({
+                hmis: state.hmis.map((hmi) =>
+                    hmi.id === id
+                        ? {
+                            ...hmi,
+                            name,
+                        }
+                        : hmi
+                ),
+            })),
+
+        deleteHmi: (id) =>
+            set((state) => {
+
+                const remainingHmis =
+                    state.hmis.filter(
+                        (hmi) => hmi.id !== id
+                    );
+
+                return {
+
+                    hmis: remainingHmis,
+
+                    selectedHmiId:
+                        state.selectedHmiId === id
+                            ? remainingHmis[0]?.id ?? ""
+                            : state.selectedHmiId,
+                };
+            }),
+
     })
 );
