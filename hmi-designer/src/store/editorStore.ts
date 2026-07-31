@@ -19,8 +19,6 @@ interface EditorState {
     clearSelection: () => void;
     updateShapePosition: (id: string, x: number, y: number) => void;
     updateShapeSize: (id: string, width: number, height: number) => void;
-    addRectangle: () => void;
-    addCircle: () => void;
     deleteSelectedShape: () => void;
     updateShapeProperties: (id: string, properties: Partial<ShapeModel>) => void;
     addShape: (type: ShapeType, x: number, y: number) => void;
@@ -151,17 +149,6 @@ export const useEditorStore = create<EditorState>(
 
         updateShapePosition: (id, x, y) => {
             set((state) => ({
-
-                shapes: state.shapes.map((shape) =>
-                    shape.id === id
-                        ? {
-                            ...shape,
-                            x,
-                            y,
-                        }
-                        : shape
-                ),
-
                 hmis: state.hmis.map((hmi) =>
                     hmi.id === state.selectedHmiId
                         ? {
@@ -183,88 +170,18 @@ export const useEditorStore = create<EditorState>(
             }));
         },
 
-        addRectangle: () =>
-            set((state) => {
-                const id = uuidv4();
-
-                return {
-                    shapes: [
-                        ...state.shapes,
-                        {
-                            id,
-                            name: `Rectangle${state.shapes.filter(
-                                (s) => s.type === "rectangle"
-                            ).length + 1
-                                }`,
-                            amlType: "InternalElement",
-                            refBaseSystemUnitPath: "MTPHMISUCLib/VisualObject",
-
-                            ports: [
-                                {
-                                    id: `${id}_N0`,
-                                    shapeId: id,
-                                    name: "N0",
-                                    offsetX: 150,
-                                    offsetY: 50,
-                                },
-                            ],
-
-                            type: "rectangle",
-                            x: 200,
-                            y: 200,
-                            width: 150,
-                            height: 100,
-                            fill: "#1976d2",
-                        },
-                    ],
-                };
-            }),
-
-        addCircle: () =>
-            set((state) => {
-                const id = uuidv4();
-
-                return {
-                    shapes: [
-                        ...state.shapes,
-                        {
-                            id,
-                            name: `Circle${state.shapes.filter(
-                                (s) => s.type === "circle"
-                            ).length + 1
-                                }`,
-                            amlType: "InternalElement",
-                            refBaseSystemUnitPath: "MTPHMISUCLib/VisualObject",
-
-                            ports: [
-                                {
-                                    id: `${id}_N0`,
-                                    shapeId: id,
-                                    name: "N0",
-                                    offsetX: 100,
-                                    offsetY: 50,
-                                },
-                            ],
-
-                            type: "circle",
-                            x: 250,
-                            y: 250,
-                            width: 100,
-                            height: 100,
-                            fill: "#ef6c00",
-                        },
-                    ],
-                };
-            }),
-
         addShape: (type, x, y) =>
             set((state) => {
                 const definition = shapeRegistry[type];
-                console.log("type:", type);
-                console.log("definition:", shapeRegistry[type]);
+
+                const currentHmi = getCurrentHmi(state);
+
+                if (!currentHmi) {
+                    return {};
+                }
 
                 const count =
-                    state.shapes.filter(
+                    currentHmi.shapes.filter(
                         (s) => s.type === type
                     ).length + 1;
 
@@ -342,19 +259,7 @@ export const useEditorStore = create<EditorState>(
                     ports,
                 };
 
-                const currentHmi =
-                    getCurrentHmi(state);
-
-                if (!currentHmi) {
-                    return {};
-                }
-
                 return {
-                    shapes: [
-                        ...state.shapes,
-                        newShape,
-                    ],
-
                     hmis: state.hmis.map((hmi) =>
                         hmi.id === state.selectedHmiId
                             ? {
@@ -371,13 +276,22 @@ export const useEditorStore = create<EditorState>(
 
         updateShapeProperties: (id, properties) =>
             set((state) => ({
-                shapes: state.shapes.map((shape) =>
-                    shape.id === id
+
+                hmis: state.hmis.map((hmi) =>
+                    hmi.id === state.selectedHmiId
                         ? {
-                            ...shape,
-                            ...properties,
+                            ...hmi,
+
+                            shapes: hmi.shapes.map((shape) =>
+                                shape.id === id
+                                    ? {
+                                        ...shape,
+                                        ...properties,
+                                    }
+                                    : shape
+                            ),
                         }
-                        : shape
+                        : hmi
                 ),
             })),
 
@@ -388,26 +302,6 @@ export const useEditorStore = create<EditorState>(
                     state.selectedShapeIds;
 
                 return {
-
-                    // Keep global arrays in sync for now
-                    shapes: state.shapes.filter(
-                        (shape) =>
-                            !deletedIds.includes(
-                                shape.id
-                            )
-                    ),
-
-                    connections:
-                        state.connections.filter(
-                            (connection) =>
-                                !deletedIds.includes(
-                                    connection.sourceShapeId
-                                ) &&
-                                !deletedIds.includes(
-                                    connection.targetShapeId
-                                )
-                        ),
-
                     hmis: state.hmis.map((hmi) =>
                         hmi.id ===
                             state.selectedHmiId
@@ -443,43 +337,6 @@ export const useEditorStore = create<EditorState>(
 
         updateShapeSize: (id, width, height) =>
             set((state) => ({
-
-                shapes: state.shapes.map((shape) => {
-
-                    if (shape.id !== id) {
-                        return shape;
-                    }
-
-                    const updatedPorts =
-                        shape.ports?.map((port) => {
-
-                            if (port.name === "N0") {
-                                return {
-                                    ...port,
-                                    offsetX: 0,
-                                    offsetY: height * 0.6,
-                                };
-                            }
-
-                            if (port.name === "N1") {
-                                return {
-                                    ...port,
-                                    offsetX: width,
-                                    offsetY: height * 0.6,
-                                };
-                            }
-
-                            return port;
-                        });
-
-                    return {
-                        ...shape,
-                        width,
-                        height,
-                        ports: updatedPorts,
-                    };
-                }),
-
                 hmis: state.hmis.map((hmi) =>
                     hmi.id === state.selectedHmiId
                         ? {
@@ -527,27 +384,6 @@ export const useEditorStore = create<EditorState>(
 
         updateMultipleShapePositions: (updates) =>
             set((state) => ({
-
-                shapes: state.shapes.map(
-                    (shape) => {
-                        const update =
-                            updates.find(
-                                (u) =>
-                                    u.id === shape.id
-                            );
-
-                        if (!update) {
-                            return shape;
-                        }
-
-                        return {
-                            ...shape,
-                            x: update.x,
-                            y: update.y,
-                        };
-                    }
-                ),
-
                 hmis: state.hmis.map(
                     (hmi) =>
                         hmi.id ===
@@ -595,10 +431,29 @@ export const useEditorStore = create<EditorState>(
             targetPortId
         ) =>
             set((state) => {
+
+                const currentHmi =
+                    getCurrentHmi(state);
+
+                if (!currentHmi) {
+                    return {};
+                }
+
                 const exists =
-                    state.connections.some(
+                    currentHmi.connections.some(
                         (c) =>
-                            (c.sourcePortId === sourcePortId && c.targetPortId === targetPortId) || (c.sourcePortId === targetPortId && c.targetPortId === sourcePortId)
+                            (
+                                c.sourcePortId ===
+                                sourcePortId &&
+                                c.targetPortId ===
+                                targetPortId
+                            ) ||
+                            (
+                                c.sourcePortId ===
+                                targetPortId &&
+                                c.targetPortId ===
+                                sourcePortId
+                            )
                     );
 
                 if (exists) {
@@ -614,21 +469,20 @@ export const useEditorStore = create<EditorState>(
                 };
 
                 return {
-                    connections: [
-                        ...state.connections,
-                        newConnection,
-                    ],
 
-                    hmis: state.hmis.map((hmi) =>
-                        hmi.id === state.selectedHmiId
-                            ? {
-                                ...hmi,
-                                connections: [
-                                    ...hmi.connections,
-                                    newConnection,
-                                ],
-                            }
-                            : hmi
+                    hmis: state.hmis.map(
+                        (hmi) =>
+                            hmi.id ===
+                                state.selectedHmiId
+                                ? {
+                                    ...hmi,
+
+                                    connections: [
+                                        ...hmi.connections,
+                                        newConnection,
+                                    ],
+                                }
+                                : hmi
                     ),
                 };
             }),
@@ -648,14 +502,6 @@ export const useEditorStore = create<EditorState>(
                 }
 
                 return {
-
-                    // Keep global list in sync for now
-                    connections:
-                        state.connections.filter(
-                            (c) =>
-                                c.id !==
-                                state.selectedConnectionId
-                        ),
 
                     hmis: state.hmis.map(
                         (hmi) =>

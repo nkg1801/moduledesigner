@@ -18,8 +18,36 @@ function App() {
     const selectedPortIds = useEditorStore((state) => state.selectedPortIds);
     const deleteSelectedConnection = useEditorStore((state) => state.deleteSelectedConnection);
     useDeleteKey();
-    const shapes = useEditorStore((state) => state.shapes);
-    const connections = useEditorStore((state) => state.connections);
+    const shapes =
+        useEditorStore((state) => {
+
+            const currentHmi =
+                state.hmis.find(
+                    (hmi) =>
+                        hmi.id ===
+                        state.selectedHmiId
+                );
+
+            return (
+                currentHmi?.shapes ?? []
+            );
+        });
+
+    const connections =
+        useEditorStore((state) => {
+
+            const currentHmi =
+                state.hmis.find(
+                    (hmi) =>
+                        hmi.id ===
+                        state.selectedHmiId
+                );
+
+            return (
+                currentHmi?.connections ?? []
+            );
+        });
+
     const selectedShape = shapes.find((shape) => selectedShapeIds.includes(shape.id));
     const clearSelectedPorts = useEditorStore((state) => state.clearSelectedPorts);
     const hmis = useEditorStore((state) => state.hmis);
