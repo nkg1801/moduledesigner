@@ -31,6 +31,12 @@ interface EditorState {
     renameHmi: (id: string, name: string) => void;
     deleteHmi: (id: string) => void;
     duplicateHmi: (id: string) => void;
+    services: ServiceModel[];
+    addService: (name: string) => void;
+    renameService: (id: string,name: string) => void;
+    deleteService: (id: string) => void;
+    selectedServiceId: string | null;
+    selectService: (id: string | null) => void;
 }
 
 export interface HMIDocument {
@@ -38,6 +44,11 @@ export interface HMIDocument {
     name: string;
     shapes: ShapeModel[];
     connections: ConnectionModel[];
+}
+
+export interface ServiceModel {
+    id: string;
+    name: string;
 }
 
 export type ShapeType =
@@ -74,14 +85,13 @@ function getCurrentHmi(state: EditorState) {
 // this is zustland store for the editor state, including shapes, connections, and selection state
 export const useEditorStore = create<EditorState>(
     (set) => ({
-        shapes: [
-
-        ],
-
+        shapes: [],
         selectedShapeIds: [],
         selectedPortIds: [],
         selectedConnectionId: null,
         connections: [],
+        services: [],
+        selectedServiceId: null,
 
         hmis: [
             {
@@ -334,7 +344,6 @@ export const useEditorStore = create<EditorState>(
                 };
             }),
 
-
         updateShapeSize: (id, width, height) =>
             set((state) => ({
                 hmis: state.hmis.map((hmi) =>
@@ -424,12 +433,7 @@ export const useEditorStore = create<EditorState>(
                 ),
             })),
 
-        addConnection: (
-            sourceShapeId,
-            sourcePortId,
-            targetShapeId,
-            targetPortId
-        ) =>
+        addConnection: (sourceShapeId, sourcePortId,targetShapeId,targetPortId) =>
             set((state) => {
 
                 const currentHmi =
@@ -556,9 +560,11 @@ export const useEditorStore = create<EditorState>(
             }),
 
         selectHmi: (id) =>
-            set({
+            set(() => ({
                 selectedHmiId: id,
-            }),
+                selectedServiceId: null,
+            })),
+
 
         renameHmi: (id, name) =>
             set((state) => ({
@@ -744,5 +750,48 @@ export const useEditorStore = create<EditorState>(
                         newHmiId,
                 };
             }),
+        addService: (name) =>
+            set((state) => ({
+
+                services: [
+                    ...state.services,
+                    {
+                        id: crypto.randomUUID(),
+                        name,
+                    },
+                ],
+            })),
+
+        renameService: (id,name) =>
+            set((state) => ({
+
+                services:
+                    state.services.map(
+                        (service) =>
+                            service.id === id
+                                ? {
+                                    ...service,
+                                    name,
+                                }
+                                : service
+                    ),
+            })),
+
+        deleteService: (id) =>
+            set((state) => ({
+
+                services:
+                    state.services.filter(
+                        (service) =>
+                            service.id !== id
+                    ),
+            })),
+
+        selectService: (id) =>
+            set(() => ({
+                selectedServiceId: id,
+                selectedShapeIds: [],
+            })),
+
     })
 );

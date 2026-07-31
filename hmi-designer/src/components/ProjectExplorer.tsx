@@ -5,6 +5,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
 import { useEditorStore } from "../store/editorStore";
+import EngineeringIcon from "@mui/icons-material/Engineering";
 
 export default function ProjectExplorer() {
 
@@ -29,24 +30,22 @@ export default function ProjectExplorer() {
 				state.renameHmi
 		);
 
-	const deleteHmi =
+	const deleteHmi = useEditorStore((state) => state.deleteHmi);
+	const duplicateHmi = useEditorStore((state) => state.duplicateHmi);
+	const [contextMenu, setContextMenu] = useState<{mouseX: number;mouseY: number;hmiId: string;} | null>(null);
+	const services = useEditorStore((state) => state.services);
+	const addService = useEditorStore((state) => state.addService);
+	const selectedServiceId =
 		useEditorStore(
 			(state) =>
-				state.deleteHmi
+				state.selectedServiceId
 		);
 
-	const duplicateHmi =
+	const selectService =
 		useEditorStore(
 			(state) =>
-				state.duplicateHmi
+				state.selectService
 		);
-
-	const [contextMenu, setContextMenu] =
-		useState<{
-			mouseX: number;
-			mouseY: number;
-			hmiId: string;
-		} | null>(null);
 
 	return (
 		<Box>
@@ -83,25 +82,13 @@ export default function ProjectExplorer() {
 
 							e.preventDefault();
 
-							setContextMenu({
-								mouseX: e.clientX,
-								mouseY: e.clientY,
-								hmiId: hmi.id,
-							});
+							setContextMenu({mouseX: e.clientX,mouseY: e.clientY,hmiId: hmi.id,});
 						}}
 
 						onDoubleClick={() => {
+							const newName = prompt( "HMI Name", hmi.name);
 
-							const newName =
-								prompt(
-									"HMI Name",
-									hmi.name
-								);
-
-							if (
-								newName &&
-								newName.trim()
-							) {
+							if (newName &&newName.trim()) {
 								renameHmi(
 									hmi.id,
 									newName.trim()
@@ -136,7 +123,94 @@ export default function ProjectExplorer() {
 						📄 {hmi.name}
 					</Box>
 
+
+
 				))}
+			</Box>
+
+			<Box
+				sx={{
+					ml: 1,
+					mt: 2,
+				}}
+			>
+
+				<Typography
+					sx={{
+						fontWeight: 500,
+						mt: 2,
+						cursor: "pointer",
+					}}
+					onContextMenu={(e) => {
+
+						e.preventDefault();
+
+						const name =
+							prompt(
+								"Service Name"
+							);
+
+						if (
+							name &&
+							name.trim()
+						) {
+							addService(
+								name.trim()
+							);
+						}
+					}}
+				>
+					▼ Services
+				</Typography>
+
+				{services.map(
+					(service) => (
+
+						<Box
+							key={service.id}
+							onClick={() =>
+								selectService(service.id)
+							}
+							sx={{
+								ml: 2,
+								mt: 0.5,
+								p: 0.5,
+
+								display: "flex",
+								alignItems: "center",
+								gap: 1,
+
+								cursor: "pointer",
+
+								borderRadius: 1,
+
+								backgroundColor:
+									selectedServiceId ===
+										service.id
+										? "#1976d2"
+										: "transparent",
+
+								color:
+									selectedServiceId ===
+										service.id
+										? "white"
+										: "inherit",
+
+								"&:hover": {
+									backgroundColor:
+										selectedServiceId ===
+											service.id
+											? "#1976d2"
+											: "#eeeeee",
+								},
+							}}
+						>
+							<EngineeringIcon fontSize="small" />
+							{service.name}
+						</Box>
+					)
+				)}
+
 			</Box>
 
 			<Menu
