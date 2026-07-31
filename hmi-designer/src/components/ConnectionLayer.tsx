@@ -18,10 +18,21 @@ export default function ConnectionLayer() {
             );
         });
 
-  const shapes =
-    useEditorStore(
-      (state) => state.shapes
-        );
+    const shapes =
+        useEditorStore((state) => {
+
+            const currentHmi =
+                state.hmis.find(
+                    (hmi) =>
+                        hmi.id ===
+                        state.selectedHmiId
+                );
+
+            return (
+                currentHmi?.shapes ?? []
+            );
+        });
+
 
     const selectedConnectionId =
         useEditorStore(

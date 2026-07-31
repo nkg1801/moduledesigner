@@ -11,7 +11,6 @@ interface EditorState {
     selectedShapeIds: string[];
     selectedPortIds: string[];
     selectedConnectionId: string | null;
-
     selectConnection: (connectionId: string | null) => void;
     deleteSelectedConnection: () => void;
     clearSelectedPorts: () => void;
@@ -25,28 +24,15 @@ interface EditorState {
     deleteSelectedShape: () => void;
     updateShapeProperties: (id: string, properties: Partial<ShapeModel>) => void;
     addShape: (type: ShapeType, x: number, y: number) => void;
-    
-
-    updateMultipleShapePositions: (updates: {
-            id: string;
-            x: number;
-            y: number;
-        }[]
-    ) => void;
-
-    addConnection: (
-        sourceShapeId: string,
-        sourcePortId: string,
-        targetShapeId: string,
-        targetPortId: string
-    ) => void;
-
+    updateMultipleShapePositions: (updates: { id: string; x: number; y: number; }[]) => void;
+    addConnection: (sourceShapeId: string, sourcePortId: string, targetShapeId: string, targetPortId: string) => void;
     hmis: HMIDocument[];
     selectedHmiId: string;
     addHmi: (name?: string) => void;
     selectHmi: (id: string) => void;
     renameHmi: (id: string, name: string) => void;
     deleteHmi: (id: string) => void;
+    duplicateHmi: (id: string) => void;
 }
 
 export interface HMIDocument {
@@ -80,12 +66,12 @@ export type ShapeType =
     | "heatExchanger"
     | "vessel";
 
-    function getCurrentHmi(state: EditorState) {
-        return state.hmis.find(
-            (hmi) =>
-                hmi.id === state.selectedHmiId
-        );
-    }
+function getCurrentHmi(state: EditorState) {
+    return state.hmis.find(
+        (hmi) =>
+            hmi.id === state.selectedHmiId
+    );
+}
 
 // this is zustland store for the editor state, including shapes, connections, and selection state
 export const useEditorStore = create<EditorState>(
@@ -306,7 +292,7 @@ export const useEditorStore = create<EditorState>(
                         },
                     ];
                 }
-                else if (type === "controlValve" || type === "checkValve" ||  type === "blockValve" || type === "threeWayValve") {
+                else if (type === "controlValve" || type === "checkValve" || type === "blockValve" || type === "threeWayValve") {
 
                     ports = [
                         {
@@ -363,46 +349,6 @@ export const useEditorStore = create<EditorState>(
                     return {};
                 }
 
-                /*return {
-                    shapes: [
-                        ...state.shapes,
-                        {
-                            id,
-                            name: definition.displayName + count,
-                            eClassId: definition.eClassId,
-                            amlType: definition.amlType,
-                            refBaseSystemUnitPath: definition.refBaseSystemUnitPath,
-                            imageSrc: definition.imageSrc,
-                            type,
-                            x,
-                            y,
-                            width: definition.width,
-                            height: definition.height,
-                            fill: definition.fill,
-                            ports,
-                        },
-                    ],
-                };*/
-
-                console.log(
-                    "Adding shape to:",
-                    currentHmi.name
-                );
-
-                /*return {
-                    hmis: state.hmis.map((hmi) =>
-                        hmi.id === state.selectedHmiId
-                            ? {
-                                ...hmi,
-                                shapes: [
-                                    ...hmi.shapes,
-                                    newShape,
-                                ],
-                            }
-                            : hmi
-                    ),
-                };*/
-
                 return {
                     shapes: [
                         ...state.shapes,
@@ -423,7 +369,7 @@ export const useEditorStore = create<EditorState>(
                 };
             }),
 
-        updateShapeProperties: (id,properties) =>
+        updateShapeProperties: (id, properties) =>
             set((state) => ({
                 shapes: state.shapes.map((shape) =>
                     shape.id === id
@@ -667,19 +613,6 @@ export const useEditorStore = create<EditorState>(
                     targetPortId,
                 };
 
-                /*return {
-                    connections: [
-                        ...state.connections,
-                        {
-                            id: crypto.randomUUID(),
-                            sourceShapeId,
-                            sourcePortId,
-                            targetShapeId,
-                            targetPortId,
-                        },
-                    ],
-                };*/
-
                 return {
                     connections: [
                         ...state.connections,
@@ -755,11 +688,8 @@ export const useEditorStore = create<EditorState>(
         addHmi: (name) =>
             set((state) => {
 
-                const count =
-                    state.hmis.length + 1;
-
-                const id =
-                    `hmi-${count}`;
+                const count = state.hmis.length + 1;
+                const id = crypto.randomUUID();
 
                 return {
                     hmis: [
@@ -783,10 +713,8 @@ export const useEditorStore = create<EditorState>(
             set({
                 selectedHmiId: id,
             }),
-        renameHmi: (
-            id,
-            name
-        ) =>
+
+        renameHmi: (id, name) =>
             set((state) => ({
                 hmis: state.hmis.map((hmi) =>
                     hmi.id === id
@@ -817,5 +745,158 @@ export const useEditorStore = create<EditorState>(
                 };
             }),
 
+        duplicateHmi: (id) =>
+            set((state) => {
+
+                const source =
+                    state.hmis.find(
+                        (hmi) => hmi.id === id
+                    );
+
+                if (!source) {
+                    return {};
+                }
+
+                const shapeIdMap =
+                    new Map<string, string>();
+
+                const duplicatedShapes =
+                    source.shapes.map((shape) => {
+
+                        const newShapeId =
+                            crypto.randomUUID();
+
+                        shapeIdMap.set(
+                            shape.id,
+                            newShapeId
+                        );
+
+                        return {
+                            ...shape,
+
+                            id: newShapeId,
+
+                            ports:
+                                shape.ports?.map(
+                                    (port) => {
+
+                                        const newPortId =
+                                            `${newShapeId}_${port.name}`;
+
+                                        return {
+                                            ...port,
+
+                                            id: newPortId,
+
+                                            shapeId: newShapeId,
+                                        };
+                                    }
+                                ) ?? [],
+                        };
+                    });
+
+                const portMap =
+                    new Map<string, string>();
+
+                source.shapes.forEach(
+                    (shape, shapeIndex) => {
+
+                        shape.ports?.forEach(
+                            (
+                                originalPort,
+                                portIndex
+                            ) => {
+
+                                const newPort =
+                                    duplicatedShapes[
+                                        shapeIndex
+                                    ].ports?.[
+                                    portIndex
+                                    ];
+
+                                if (
+                                    newPort
+                                ) {
+                                    portMap.set(
+                                        originalPort.id,
+                                        newPort.id
+                                    );
+                                }
+                            }
+                        );
+                    }
+                );
+
+                const duplicatedConnections =
+                    source.connections.map(
+                        (connection) => ({
+                            ...connection,
+
+                            id:
+                                crypto.randomUUID(),
+
+                            sourceShapeId:
+                                shapeIdMap.get(
+                                    connection.sourceShapeId
+                                ) ??
+                                connection.sourceShapeId,
+
+                            targetShapeId:
+                                shapeIdMap.get(
+                                    connection.targetShapeId
+                                ) ??
+                                connection.targetShapeId,
+
+                            sourcePortId:
+                                portMap.get(
+                                    connection.sourcePortId
+                                ) ??
+                                connection.sourcePortId,
+
+                            targetPortId:
+                                portMap.get(
+                                    connection.targetPortId
+                                ) ??
+                                connection.targetPortId,
+                        })
+                    );
+
+                console.log(
+                    "Original",
+                    source.connections
+                );
+
+                console.log(
+                    "Duplicated",
+                    duplicatedConnections
+                );
+
+                const newHmiId =
+                    crypto.randomUUID();
+
+                const copiedHmi = {
+                    id: newHmiId,
+
+                    name:
+                        `${source.name} Copy`,
+
+                    shapes:
+                        duplicatedShapes,
+
+                    connections:
+                        duplicatedConnections,
+                };
+
+                return {
+
+                    hmis: [
+                        ...state.hmis,
+                        copiedHmi,
+                    ],
+
+                    selectedHmiId:
+                        newHmiId,
+                };
+            }),
     })
 );

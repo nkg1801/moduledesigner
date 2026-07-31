@@ -1,7 +1,6 @@
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import { useEditorStore } from "../store/editorStore";
 
 export default function PropertyInspector() {
@@ -38,6 +37,28 @@ export default function PropertyInspector() {
                 )
         );
 
+    const hmis =
+        useEditorStore(
+            (state) => state.hmis
+        );
+
+    const selectedHmiId =
+        useEditorStore(
+            (state) => state.selectedHmiId
+        );
+
+    const selectedHmi =
+        hmis.find(
+            (h) => h.id === selectedHmiId
+        );
+
+    const renameHmi =
+        useEditorStore(
+            (state) =>
+                state.renameHmi
+        );
+
+
     if (selectedShapeIds.length > 1) {
         return (
             <Typography>
@@ -49,9 +70,67 @@ export default function PropertyInspector() {
 
     if (!selectedShape) {
         return (
-            <Typography>
-                No shape selected
-            </Typography>
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                }}
+            >
+                <Typography
+                    variant="h6"
+                >
+                    HMI Properties
+                </Typography>
+
+                <TextField
+                    label="Name"
+                    size="small"
+                    value={selectedHmi?.name ?? ""}
+                    onChange={(e) => {
+
+                        if (!selectedHmi) {
+                            return;
+                        }
+
+                        renameHmi(
+                            selectedHmi.id,
+                            e.target.value
+                        );
+                    }}
+                />
+
+                <TextField
+                    label="Id"
+                    size="small"
+                    value={selectedHmi?.id ?? ""}
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+
+                <TextField
+                    label="Shapes"
+                    size="small"
+                    value={
+                        selectedHmi?.shapes.length ?? 0
+                    }
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+
+                <TextField
+                    label="Connections"
+                    size="small"
+                    value={
+                        selectedHmi?.connections.length ?? 0
+                    }
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+            </Box>
         );
     }
 

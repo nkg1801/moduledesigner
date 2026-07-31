@@ -1,141 +1,247 @@
 ﻿import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FolderIcon from "@mui/icons-material/Folder";
-//import DescriptionIcon from "@mui/icons-material/Description";
-//import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-//import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import { useState } from "react";
 import { useEditorStore } from "../store/editorStore";
 
 export default function ProjectExplorer() {
 
-    const hmis =
-        useEditorStore(
-            (state) => state.hmis
-        );
+	const hmis =
+		useEditorStore(
+			(state) => state.hmis
+		);
 
-    const selectedHmiId =
-        useEditorStore(
-            (state) => state.selectedHmiId
-        );
+	const selectedHmiId =
+		useEditorStore(
+			(state) => state.selectedHmiId
+		);
 
-    const selectHmi =
-        useEditorStore(
-            (state) => state.selectHmi
-        );
+	const selectHmi =
+		useEditorStore(
+			(state) => state.selectHmi
+		);
 
-    const renameHmi =
-        useEditorStore(
-            (state) =>
-                state.renameHmi
-        );
+	const renameHmi =
+		useEditorStore(
+			(state) =>
+				state.renameHmi
+		);
 
-    const deleteHmi =
-        useEditorStore(
-            (state) =>
-                state.deleteHmi
-        );
+	const deleteHmi =
+		useEditorStore(
+			(state) =>
+				state.deleteHmi
+		);
 
-    return (
-        <Box>
+	const duplicateHmi =
+		useEditorStore(
+			(state) =>
+				state.duplicateHmi
+		);
 
-            <Box
-                sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                }}
-            >
-                <FolderIcon fontSize="small" />
-                Demo Project
-            </Box>
+	const [contextMenu, setContextMenu] =
+		useState<{
+			mouseX: number;
+			mouseY: number;
+			hmiId: string;
+		} | null>(null);
 
-            <Box sx={{ ml: 1 }}>
+	return (
+		<Box>
+			<Box
+				sx={{
+					display: "flex",
+					alignItems: "center",
+					gap: 1,
+				}}
+			>
+				<FolderIcon fontSize="small" />
+				Demo Project
+			</Box>
 
-                <Typography
-                    sx={{
-                        fontWeight: 500,
-                    }}
-                >
-                    ▼ HMI
-                </Typography>
+			<Box sx={{ ml: 1 }}>
 
-                {hmis.map((hmi) => (
+				<Typography
+					sx={{
+						fontWeight: 500,
+					}}
+				>
+					▼ HMI
+				</Typography>
 
-                    <Box
-                        key={hmi.id}
-                        onClick={() =>
-                            selectHmi(hmi.id)
-                        }
+				{hmis.map((hmi) => (
 
-                        onContextMenu={(e) => {
-                            e.preventDefault();
-                            if (hmis.length === 1) {
-                                alert("At least one HMI must exist.");
-                                return;
-                            }
+					<Box
+						key={hmi.id}
+						onClick={() =>
+							selectHmi(hmi.id)
+						}
 
-                            const confirmDelete = window.confirm(`Delete ${hmi.name}?`);
-                            if (confirmDelete) {
-                                deleteHmi(hmi.id);
-                            }
-                        }}
+						onContextMenu={(e) => {
 
-                        onDoubleClick={() => {
+							e.preventDefault();
 
-                            const newName =
-                                prompt(
-                                    "HMI Name",
-                                    hmi.name
-                                );
+							setContextMenu({
+								mouseX: e.clientX,
+								mouseY: e.clientY,
+								hmiId: hmi.id,
+							});
+						}}
 
-                            if (
-                                newName &&
-                                newName.trim()
-                            ) {
-                                renameHmi(
-                                    hmi.id,
-                                    newName.trim()
-                                );
-                            }
-                        }}
+						onDoubleClick={() => {
 
-                        sx={{
-                            ml: 2,
-                            mt: 0.5,
-                            p: 0.5,
+							const newName =
+								prompt(
+									"HMI Name",
+									hmi.name
+								);
 
-                            cursor: "pointer",
+							if (
+								newName &&
+								newName.trim()
+							) {
+								renameHmi(
+									hmi.id,
+									newName.trim()
+								);
+							}
+						}}
 
-                            borderRadius: 1,
+						sx={{
+							ml: 2,
+							mt: 0.5,
+							p: 0.5,
 
-                            backgroundColor:
-                                selectedHmiId ===
-                                hmi.id
-                                    ? "#1976d2"
-                                    : "transparent",
+							cursor: "pointer",
 
-                            color:
-                                selectedHmiId ===
-                                hmi.id
-                                    ? "white"
-                                    : "inherit",
+							borderRadius: 1,
 
-                            "&:hover": {
-                                backgroundColor:
-                                    selectedHmiId ===
-                                    hmi.id
-                                        ? "#1976d2"
-                                        : "#eeeeee",
-                            },
-                        }}
-                    >
-                        📄 {hmi.name}
-                    </Box>
+							backgroundColor:
+								selectedHmiId === hmi.id ? "#1976d2" : "transparent",
 
-                ))}
+							color:
+								selectedHmiId === hmi.id ? "white" : "inherit",
 
-            </Box>
+							"&:hover": {
+								backgroundColor:
+									selectedHmiId ===
+										hmi.id
+										? "#1976d2"
+										: "#eeeeee",
+							},
+						}}
+					>
+						📄 {hmi.name}
+					</Box>
 
-        </Box>
-    );
+				))}
+			</Box>
+
+			<Menu
+				open={contextMenu !== null}
+				onClose={() =>
+					setContextMenu(null)
+				}
+				anchorReference="anchorPosition"
+				anchorPosition={
+					contextMenu
+						? {
+							top:
+								contextMenu.mouseY,
+							left:
+								contextMenu.mouseX,
+						}
+						: undefined
+				}
+			>
+				<MenuItem
+					onClick={() => {
+
+						if (!contextMenu) {
+							return;
+						}
+
+						const hmi =
+							hmis.find(
+								(h) =>
+									h.id ===
+									contextMenu.hmiId
+							);
+
+						if (!hmi) {
+							return;
+						}
+
+						const newName = prompt("HMI Name",hmi.name);
+
+						if (newName && newName.trim()) {
+							renameHmi(hmi.id, newName.trim());
+						}
+
+						setContextMenu(null);
+					}}
+				>
+					Rename
+				</MenuItem>
+
+				<MenuItem
+					onClick={() => {
+
+						if (!contextMenu) {
+							return;
+						}
+
+						duplicateHmi(contextMenu.hmiId);
+						setContextMenu(null);
+					}}
+				>
+					Duplicate
+				</MenuItem>
+
+				<MenuItem
+					onClick={() => {
+
+						if (!contextMenu) {
+							return;
+						}
+
+						if (hmis.length === 1) {
+							alert(
+								"At least one HMI must exist."
+							);
+
+							setContextMenu(null);
+							return;
+						}
+
+						const hmi =
+							hmis.find(
+								(h) =>
+									h.id ===
+									contextMenu.hmiId
+							);
+
+						if (!hmi) {
+							return;
+						}
+
+						const confirmed =
+							window.confirm(
+								`Delete ${hmi.name}?`
+							);
+
+						if (confirmed) {
+							deleteHmi(hmi.id);
+						}
+
+						setContextMenu(null);
+					}}
+				>
+					Delete
+				</MenuItem>
+			</Menu>
+		</Box>
+	);
 }
