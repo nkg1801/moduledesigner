@@ -12,6 +12,8 @@ interface EditorState {
     selectedPortIds: string[];
     selectedConnectionId: string | null;
 
+
+
     selectConnection: (connectionId: string | null) => void;
     deleteSelectedConnection: () => void;
     clearSelectedPorts: () => void;
@@ -40,6 +42,11 @@ interface EditorState {
         targetShapeId: string,
         targetPortId: string
     ) => void;
+
+    hmis: HMIDocument[];
+    selectedHmiId: string;
+    addHmi: () => void;
+    selectHmi: (id: string) => void;
 }
 
 export interface HMIDocument {
@@ -73,7 +80,6 @@ export type ShapeType =
 
 export const useEditorStore = create<EditorState>(
     (set) => ({
-        //default shapes when the editor starts
         shapes: [
 
         ],
@@ -82,6 +88,15 @@ export const useEditorStore = create<EditorState>(
         selectedPortIds: [],
         selectedConnectionId: null,
         connections: [],
+
+        hmis: [
+            {
+                id: "hmi-1",
+                name: "HMI_1",
+            },
+        ],
+
+        selectedHmiId: "hmi-1",
 
         selectShape: (
             id,
@@ -467,6 +482,33 @@ export const useEditorStore = create<EditorState>(
         clearSelectedPorts: () =>
             set({
                 selectedPortIds: [],
+            }),
+
+
+        addHmi: () =>
+            set((state) => {
+                const count =
+                    state.hmis.length + 1;
+
+                const id =
+                    `hmi-${count}`;
+
+                return {
+                    hmis: [
+                        ...state.hmis,
+                        {
+                            id,
+                            name: `HMI_${count}`,
+                        },
+                    ],
+
+                    selectedHmiId: id,
+                };
+            }),
+
+        selectHmi: (id) =>
+            set({
+                selectedHmiId: id,
             }),
     })
 );
