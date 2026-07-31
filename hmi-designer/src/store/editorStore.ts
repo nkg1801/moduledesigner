@@ -75,48 +75,7 @@ export const useEditorStore = create<EditorState>(
     (set) => ({
         //default shapes when the editor starts
         shapes: [
-            /*{
-                id: "shape1",
-                name: "Rectangle1",
-                amlType: "InternalElement",
-                refBaseSystemUnitPath: "MTPHMISUCLib/VisualObject",
-                ports: [
-                    {
-                        id: "shape1_N0",
-                        shapeId: "shape1",
-                        name: "N0",
-                        offsetX: 150,
-                        offsetY: 50,
-                    },
-                ],
-                type: "rectangle",
-                x: 100,
-                y: 100,
-                width: 150,
-                height: 100,
-                fill: "#1976d2"
-            },
-            {
-                id: "shape2",
-                name: "Rectangle2",
-                amlType: "InternalElement",
-                refBaseSystemUnitPath: "MTPHMISUCLib/VisualObject",
-                ports: [
-                    {
-                        id: "shape2_N0",
-                        shapeId: "shape2",
-                        name: "N0",
-                        offsetX: 180,
-                        offsetY: 60,
-                    },
-                ],
-                type: "rectangle",
-                x: 350,
-                y: 180,
-                width: 180,
-                height: 120,
-                fill: "#2e7d32"
-            }*/
+
         ],
 
         selectedShapeIds: [],
