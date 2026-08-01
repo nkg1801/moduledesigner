@@ -82,8 +82,19 @@ export interface ServiceState {
 export interface ServiceModel {
     id: string;
     name: string;
+
     states: ServiceState[];
+
     parameters: ServiceParameter[];
+
+    transitions: {
+        starting: boolean;
+        pausing: boolean;
+        holding: boolean;
+        stopping: boolean;
+        aborting: boolean;
+        resetting: boolean;
+    };
 }
 
 export interface ServiceParameter {
@@ -859,16 +870,23 @@ export const useEditorStore = create<EditorState>(
                     ...state.services,
                     {
                         id: crypto.randomUUID(),
+
                         name,
+
+                        parameters: [],
+
+                        transitions: {
+                            starting: true,
+                            pausing: true,
+                            holding: true,
+                            stopping: false,
+                            aborting: false,
+                            resetting: true,
+                        },
+
                         states: createDefaultStates(),
                     },
                 ];
-
-                console.log(
-                    "updatedServices",
-                    updatedServices.length,
-                    updatedServices
-                );
 
                 return {
                     services: updatedServices,
