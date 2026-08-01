@@ -52,10 +52,36 @@ export default function PropertyInspector() {
             (h) => h.id === selectedHmiId
         );
 
-    const renameHmi =
+    const renameHmi = useEditorStore((state) =>state.renameHmi);
+
+    const services =
+        useEditorStore(
+            (state) => state.services
+        );
+
+    const selectedServiceId =
+        useEditorStore(
+            (state) => state.selectedServiceId
+        );
+
+    const selectedServiceStateId =
         useEditorStore(
             (state) =>
-                state.renameHmi
+                state.selectedServiceStateId
+        );
+
+    const selectedService =
+        services.find(
+            (service) =>
+                service.id ===
+                selectedServiceId
+        );
+
+    const selectedState =
+        selectedService?.states.find(
+            (state) =>
+                state.id ===
+                selectedServiceStateId
         );
 
 
@@ -65,6 +91,90 @@ export default function PropertyInspector() {
                 {selectedShapeIds.length}
                 {" "}shapes selected
             </Typography>
+        );
+    }
+
+    if (selectedState) {
+        return (
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                }}
+            >
+                <Typography variant="h6">
+                    State Properties
+                </Typography>
+
+                <TextField
+                    label="Name"
+                    value={selectedState.name}
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+
+                <TextField
+                    label="State ID"
+                    value={selectedState.id}
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+
+                <TextField
+                    label="Service"
+                    value={
+                        selectedService?.name ?? ""
+                    }
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+            </Box>
+        );
+    }
+
+    if (selectedService) {
+        return (
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                }}
+            >
+                <Typography variant="h6">
+                    Service Properties
+                </Typography>
+
+                <TextField
+                    label="Name"
+                    value={selectedService.name}
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+
+                <TextField
+                    label="ID"
+                    value={selectedService.id}
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+
+                <TextField
+                    label="States"
+                    value={
+                        selectedService.states.length
+                    }
+                    InputProps={{
+                        readOnly: true,
+                    }}
+                />
+            </Box>
         );
     }
 
@@ -104,9 +214,7 @@ export default function PropertyInspector() {
                     label="Id"
                     size="small"
                     value={selectedHmi?.id ?? ""}
-                    InputProps={{
-                        readOnly: true,
-                    }}
+                    InputProps={{readOnly: true,}}
                 />
 
                 <TextField
@@ -115,9 +223,7 @@ export default function PropertyInspector() {
                     value={
                         selectedHmi?.shapes.length ?? 0
                     }
-                    InputProps={{
-                        readOnly: true,
-                    }}
+                    InputProps={{readOnly: true,}}
                 />
 
                 <TextField
@@ -126,33 +232,28 @@ export default function PropertyInspector() {
                     value={
                         selectedHmi?.connections.length ?? 0
                     }
-                    InputProps={{
-                        readOnly: true,
-                    }}
+                    InputProps={{readOnly: true,}}
                 />
             </Box>
         );
     }
 
     return (
-
-
         <Box
             sx={{
                 display: "flex",
                 gap: 2,
                 flexWrap: "wrap",
                 mt: 1,
-            }}
-        >
+            }}>
 
             <Box
                 sx={{
                     display: "flex",
                     gap: 1,
                     mt: 1,
-                }}
-            >
+                }}>
+
                 <TextField
                     label="Name"
                     size="small"

@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import ProjectExplorer from "./components/ProjectExplorer";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import ServiceDesigner from "./canvas/ServiceDesigner";
 
 function App() {
 
@@ -54,6 +55,32 @@ function App() {
     const selectedHmiId = useEditorStore((state) => state.selectedHmiId);
     const selectHmi = useEditorStore((state) => state.selectHmi);
     const addHmi = useEditorStore((state) => state.addHmi);
+    /*const activeEditor =
+        useEditorStore(
+            (state) =>
+                state.activeEditor
+        );*/
+
+    const openEditors = useEditorStore(
+        (state) => state.openEditors
+    );
+
+    const activeEditor = useEditorStore(
+        (state) => state.activeEditor
+    );
+
+    const setActiveEditor = useEditorStore(
+        (state) => state.setActiveEditor
+    );
+
+    const activeTabValue =
+        `${activeEditor.type}-${activeEditor.id}`;
+
+    const services = useEditorStore(
+        (state) => state.services
+    );
+
+
 
     useEffect(() => {
 
@@ -275,10 +302,13 @@ ${s.ports?.map(
             </Box>
 
             {/* Main Area */}
+            {/* Main Area */}
+            {/* Main Area */}
             <Box
                 sx={{
                     flex: 1,
                     display: "flex",
+                    minWidth: 0,
                 }}
             >
                 {/* Project Explorer */}
@@ -346,30 +376,61 @@ ${s.ports?.map(
                 {/* Canvas Area */}
                 <Box
                     sx={{
-                        flex: 1,
+                        flexGrow: 1,
+                        flexShrink: 1,
+                        flexBasis: 0,
+                        minWidth: 0,
                         display: "flex",
                         flexDirection: "column",
+
                     }}
                 >
 
                     {/* HMI Tabs */}
                     <Tabs
-                        value={selectedHmiId}
-                        onChange={(_, value) =>
-                            selectHmi(value)
-                        }
+                        value={activeTabValue}
+                        onChange={(_, value) => {
+
+                            const editor =
+                                openEditors.find(
+                                    (e) =>
+                                        `${e.type}-${e.id}` === value
+                                );
+
+                            if (!editor) {
+                                return;
+                            }
+
+                            setActiveEditor(editor);
+
+                            if (editor.type === "hmi") {
+                                selectHmi(editor.id);
+                            }
+                        }}
                         sx={{
                             borderBottom: "1px solid #ddd",
                             backgroundColor: "white",
                         }}
                     >
-                        {hmis.map((hmi) => (
-                            <Tab
-                                key={hmi.id}
-                                value={hmi.id}
-                                label={hmi.name}
-                            />
-                        ))}
+                        {openEditors.map((editor) => {
+
+                            const label =
+                                editor.type === "hmi"
+                                    ? hmis.find(
+                                        (h) => h.id === editor.id
+                                    )?.name
+                                    : services.find(
+                                        (s) => s.id === editor.id
+                                    )?.name;
+
+                            return (
+                                <Tab
+                                    key={`${editor.type}-${editor.id}`}
+                                    value={`${editor.type}-${editor.id}`}
+                                    label={label}
+                                />
+                            );
+                        })}
 
                         <Tab
                             label="+"
@@ -398,39 +459,56 @@ ${s.ports?.map(
                             flex: 1,
                             display: "flex",
                             minHeight: 0,
+                            border: "4px solid orange",
                         }}
                     >
                         {/* Canvas */}
                         <Box
                             sx={{
                                 flex: 1,
+                                display: "flex",
+                                minWidth: 0,
+                                minHeight: 0,
                                 bgcolor: "#fafafa",
                             }}
                         >
-                            <DesignerCanvas />
+                            {activeEditor.type === "service"
+                                ? <ServiceDesigner />
+                                : <DesignerCanvas />
+                            }
                         </Box>
 
+
                         {/* Property Panel */}
+                        {/* 
                         <Box
                             sx={{
                                 width: 400,
-
-                                borderLeft:
-                                    "2px solid #bdbdbd",
-
-                                backgroundColor:
-                                    "#fafadf",
-
-                                boxShadow:
-                                    "-2px 0 4px rgba(0,0,0,0.08)",
-
+                                borderLeft: "2px solid #bdbdbd",
+                                backgroundColor: "#fafadf",
+                                boxShadow: "-2px 0 4px rgba(0,0,0,0.08)",
                                 p: 1,
-
                                 overflowY: "auto",
                             }}
-                        >
+                        > 
+
                             <PropertyInspector />
-                        </Box>
+                        </Box>*/}
+
+                        {activeEditor.type !== "service" && (
+                            <Box
+                                sx={{
+                                    width: 400,
+                                    borderLeft: "2px solid #bdbdbd",
+                                    backgroundColor: "#fafadf",
+                                    boxShadow: "-2px 0 4px rgba(0,0,0,0.08)",
+                                    p: 1,
+                                    overflowY: "auto",
+                                }}
+                            >
+                                <PropertyInspector />
+                            </Box>
+                        )}
 
                     </Box>
 

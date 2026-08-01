@@ -37,6 +37,33 @@ interface EditorState {
     deleteService: (id: string) => void;
     selectedServiceId: string | null;
     selectService: (id: string | null) => void;
+    selectedServiceStateId: string | null;
+
+    selectServiceState: (
+        id: string | null
+    ) => void;
+
+    selectedEditor: {
+        type: "hmi" | "service";
+        id: string;
+    };
+
+    openHmiEditor: (
+        id: string
+    ) => void;
+
+    openServiceEditor: (
+        id: string
+    ) => void;
+
+    openEditors: EditorTab[];
+
+    activeEditor: EditorTab;
+
+    setActiveEditor: (
+        tab: EditorTab
+    ) => void;
+
 }
 
 export interface HMIDocument {
@@ -46,9 +73,34 @@ export interface HMIDocument {
     connections: ConnectionModel[];
 }
 
+export interface ServiceState {
+    id: string;
+    name: string;
+    enabled: boolean;
+}
+
 export interface ServiceModel {
     id: string;
     name: string;
+    states: ServiceState[];
+    parameters: ServiceParameter[];
+}
+
+export interface ServiceParameter {
+    id: string;
+    name: string;
+    dataType: string;
+    parameterType: string;
+    minimum?: number;
+    maximum?: number;
+    defaultValue?: string;
+    unit?: string;
+    procedure?: string;
+}
+
+export interface EditorTab {
+    type: "hmi" | "service";
+    id: string;
 }
 
 export type ShapeType =
@@ -82,6 +134,31 @@ function getCurrentHmi(state: EditorState) {
     );
 }
 
+function createDefaultStates(): ServiceState[] {
+    return [
+        "Idle",
+        "Starting",
+        "Execute",
+        "Completing",
+        "Completed",
+        "Pausing",
+        "Paused",
+        "Resuming",
+        "Holding",
+        "Held",
+        "Unholding",
+        "Stopping",
+        "Stopped",
+        "Aborting",
+        "Aborted",
+        "Resetting",
+    ].map((name) => ({
+        id: crypto.randomUUID(),
+        name,
+        enabled: true,
+    }));
+}
+
 // this is zustland store for the editor state, including shapes, connections, and selection state
 export const useEditorStore = create<EditorState>(
     (set) => ({
@@ -92,6 +169,19 @@ export const useEditorStore = create<EditorState>(
         connections: [],
         services: [],
         selectedServiceId: null,
+        selectedServiceStateId: null,
+
+        openEditors: [
+            {
+                type: "hmi",
+                id: "hmi-1",
+            },
+        ],
+
+        activeEditor: {
+            type: "hmi",
+            id: "hmi-1",
+        },
 
         hmis: [
             {
@@ -103,6 +193,11 @@ export const useEditorStore = create<EditorState>(
         ],
 
         selectedHmiId: "hmi-1",
+
+        selectedEditor: {
+            type: "hmi",
+            id: "hmi-1",
+        },
 
         selectShape: (
             id,
@@ -541,21 +636,36 @@ export const useEditorStore = create<EditorState>(
                 const count = state.hmis.length + 1;
                 const id = crypto.randomUUID();
 
+                const newHmi = {
+                    id,
+                    name:
+                        name?.trim() ||
+                        `HMI_${count}`,
+                    shapes: [],
+                    connections: [],
+                };
+
                 return {
+
                     hmis: [
                         ...state.hmis,
-                        {
-                            id,
-                            name:
-                                name?.trim() ||
-                                `HMI_${count}`,
-
-                            shapes: [],
-                            connections: [],
-                        },
+                        newHmi,
                     ],
 
                     selectedHmiId: id,
+
+                    openEditors: [
+                        ...state.openEditors,
+                        {
+                            type: "hmi",
+                            id,
+                        },
+                    ],
+
+                    activeEditor: {
+                        type: "hmi",
+                        id,
+                    },
                 };
             }),
 
@@ -713,16 +823,6 @@ export const useEditorStore = create<EditorState>(
                         })
                     );
 
-                console.log(
-                    "Original",
-                    source.connections
-                );
-
-                console.log(
-                    "Duplicated",
-                    duplicatedConnections
-                );
-
                 const newHmiId =
                     crypto.randomUUID();
 
@@ -750,17 +850,31 @@ export const useEditorStore = create<EditorState>(
                         newHmiId,
                 };
             }),
-        addService: (name) =>
-            set((state) => ({
 
-                services: [
+        addService: (name) => {
+
+            set((state) => {
+
+                const updatedServices = [
                     ...state.services,
                     {
                         id: crypto.randomUUID(),
                         name,
+                        states: createDefaultStates(),
                     },
-                ],
-            })),
+                ];
+
+                console.log(
+                    "updatedServices",
+                    updatedServices.length,
+                    updatedServices
+                );
+
+                return {
+                    services: updatedServices,
+                };
+            });
+        },
 
         renameService: (id,name) =>
             set((state) => ({
@@ -790,8 +904,75 @@ export const useEditorStore = create<EditorState>(
         selectService: (id) =>
             set(() => ({
                 selectedServiceId: id,
+                selectedServiceStateId: null,
                 selectedShapeIds: [],
             })),
 
+
+        selectServiceState: (id) =>
+            set(() => ({
+                selectedServiceStateId: id,
+            })),
+
+        openHmiEditor: (id) =>
+            set((state) => {
+
+                const tab = {
+                    type: "hmi" as const,
+                    id,
+                };
+
+                const exists =
+                    state.openEditors.some(
+                        (e) =>
+                            e.type === "hmi" &&
+                            e.id === id
+                    );
+
+                return {
+                    openEditors:
+                        exists
+                            ? state.openEditors
+                            : [
+                                ...state.openEditors,
+                                tab,
+                            ],
+
+                    activeEditor: tab,
+                };
+            }),
+
+        openServiceEditor: (id) =>
+            set((state) => {
+
+                const tab = {
+                    type: "service" as const,
+                    id,
+                };
+
+                const exists =
+                    state.openEditors.some(
+                        (e) =>
+                            e.type === "service" &&
+                            e.id === id
+                    );
+
+                return {
+                    openEditors:
+                        exists
+                            ? state.openEditors
+                            : [
+                                ...state.openEditors,
+                                tab,
+                            ],
+
+                    activeEditor: tab,
+                };
+            }),
+
+        setActiveEditor: (editor) =>
+            set(() => ({
+                activeEditor: editor,
+            })),
     })
 );

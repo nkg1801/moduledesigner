@@ -8,44 +8,39 @@ import { useEditorStore } from "../store/editorStore";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 
 export default function ProjectExplorer() {
-
-	const hmis =
-		useEditorStore(
-			(state) => state.hmis
-		);
-
-	const selectedHmiId =
-		useEditorStore(
-			(state) => state.selectedHmiId
-		);
-
-	const selectHmi =
-		useEditorStore(
-			(state) => state.selectHmi
-		);
-
-	const renameHmi =
-		useEditorStore(
-			(state) =>
-				state.renameHmi
-		);
-
+	
+	const hmis = useEditorStore((state) => state.hmis);
+	const selectedHmiId = useEditorStore((state) => state.selectedHmiId);
+	const selectHmi = useEditorStore((state) => state.selectHmi);
+	const renameHmi = useEditorStore((state) =>state.renameHmi);
 	const deleteHmi = useEditorStore((state) => state.deleteHmi);
 	const duplicateHmi = useEditorStore((state) => state.duplicateHmi);
-	const [contextMenu, setContextMenu] = useState<{mouseX: number;mouseY: number;hmiId: string;} | null>(null);
+	const [contextMenu, setContextMenu] = useState<{ mouseX: number; mouseY: number; hmiId: string; } | null>(null);
+	const [expandedServices, setExpandedServices] = useState<Record<string, boolean>>({});
 	const services = useEditorStore((state) => state.services);
 	const addService = useEditorStore((state) => state.addService);
-	const selectedServiceId =
+	const selectedServiceId = useEditorStore((state) =>state.selectedServiceId);
+	const selectService =useEditorStore((state) =>state.selectService);
+	const selectedServiceStateId =useEditorStore((state) =>state.selectedServiceStateId);
+	const selectServiceState =useEditorStore((state) =>state.selectServiceState);
+	const toggleService = (serviceId: string) => {
+		setExpandedServices((prev) => ({
+			...prev,
+			[serviceId]: !prev[serviceId],
+		}));
+	};
+
+	const openServiceEditor =
 		useEditorStore(
 			(state) =>
-				state.selectedServiceId
+				state.openServiceEditor
 		);
 
-	const selectService =
-		useEditorStore(
-			(state) =>
-				state.selectService
-		);
+	console.log(
+		"render services count",
+		services.length,
+		services
+	);
 
 	return (
 		<Box>
@@ -54,8 +49,7 @@ export default function ProjectExplorer() {
 					display: "flex",
 					alignItems: "center",
 					gap: 1,
-				}}
-			>
+				}}>
 				<FolderIcon fontSize="small" />
 				Demo Project
 			</Box>
@@ -122,9 +116,6 @@ export default function ProjectExplorer() {
 					>
 						📄 {hmi.name}
 					</Box>
-
-
-
 				))}
 			</Box>
 
@@ -144,33 +135,38 @@ export default function ProjectExplorer() {
 					onContextMenu={(e) => {
 
 						e.preventDefault();
-
-						const name =
-							prompt(
-								"Service Name"
-							);
-
-						if (
-							name &&
-							name.trim()
-						) {
-							addService(
-								name.trim()
-							);
+						const name = prompt("Service Name");
+						if (name && name.trim()) {
+							addService(name.trim());
+							console.log("services count", services.length, services);
 						}
+					}}
+
+					onDoubleClick={() => {
+						openServiceEditor(
+							service.id
+						);
 					}}
 				>
 					▼ Services
 				</Typography>
 
-				{services.map(
-					(service) => (
+				{services.map((service) => (
+
+					<Box key={service.id}>
+
+						{/* Service */}
 
 						<Box
-							key={service.id}
-							onClick={() =>
-								selectService(service.id)
-							}
+							onClick={() => {
+								selectService(service.id);
+								toggleService(service.id);
+							}}
+
+							onDoubleClick={() => {
+								openServiceEditor(service.id);
+							}}
+
 							sx={{
 								ml: 2,
 								mt: 0.5,
@@ -191,26 +187,113 @@ export default function ProjectExplorer() {
 										: "transparent",
 
 								color:
-									selectedServiceId ===
-										service.id
-										? "white"
-										: "inherit",
-
-								"&:hover": {
-									backgroundColor:
-										selectedServiceId ===
-											service.id
-											? "#1976d2"
-											: "#eeeeee",
+									selectedServiceId === service.id ? "white" : "inherit","&:hover": {
+									backgroundColor: selectedServiceId === service.id ? "#1976d2" : "#eeeeee",
 								},
 							}}
 						>
+							{expandedServices[service.id] ? "▼" : "▶"}
+
 							<EngineeringIcon fontSize="small" />
 							{service.name}
 						</Box>
-					)
-				)}
 
+						{expandedServices[service.id] &&
+							service.states.map((state) => (
+
+								<Box
+									key={state.id}
+									onClick={() => {
+										selectService(service.id);
+										selectServiceState(state.id);
+									}}
+									sx={{
+										ml: 5,
+										mt: 0.25,
+										p: 0.25,
+
+										cursor: "pointer",
+
+										borderRadius: 1,
+
+										backgroundColor:
+											selectedServiceStateId === state.id
+												? "#1976d2"
+												: "transparent",
+
+										color:
+											selectedServiceStateId === state.id
+												? "white"
+												: "inherit",
+
+										"&:hover": {
+											backgroundColor:
+												selectedServiceStateId === state.id
+													? "#1976d2"
+													: "#eeeeee",
+										},
+									}}
+								>
+									▌ {state.name}
+								</Box>
+
+							))}
+					</Box>
+				))}
+			</Box>
+
+			<Box
+				sx={{
+					ml: 1,
+					mt: 2,
+				}}
+			>
+
+				<Typography
+					sx={{
+						fontWeight: 500,
+						mt: 2,
+						cursor: "pointer",
+					}}
+					onContextMenu={(e) => {
+
+						e.preventDefault();
+						const name = prompt("Place holder for tags");
+						if (name && name.trim()) {
+							addService(name.trim());
+						}
+					}}
+				>
+					▼ Tags
+				</Typography>
+			</Box>
+
+			<Box
+				sx={{
+					ml: 1,
+					mt: 2,
+				}}
+			>
+
+				<Typography
+					sx={{
+						fontWeight: 500,
+						mt: 2,
+						cursor: "pointer",
+					}}
+					onContextMenu={(e) => {
+
+						e.preventDefault();
+						const name = prompt("Place holder");
+						if (name && name.trim()) {
+							addService(name.trim());
+						}
+					}}
+
+
+				>
+					▼ Alarms
+				</Typography>
 			</Box>
 
 			<Menu
