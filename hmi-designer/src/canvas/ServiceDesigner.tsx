@@ -162,11 +162,11 @@ const level2States = [
 ];
 
 const labels = [
-    { text: "START", x: 190, y: 135 },
-    { text: "COMPLETE", x: 630, y: 135 },
-    { text: "HOLD", x: 470, y: 210 },
-    { text: "STOP", x: 320, y: 380 },
-    { text: "ABORT", x: 320, y: 480 },
+    { text: "", x: 190, y: 135 }, //START
+    { text: "", x: 630, y: 135 }, //COMPLETE
+    { text: "", x: 470, y: 210 }, //HOLD
+    { text: "", x: 320, y: 380 }, //STOP
+    { text: "", x: 320, y: 480 }, //ABORT
 ];
 
 const holdTransitions = level2States.map(
@@ -272,6 +272,60 @@ const routedTransitions = [
     ["completed", "aborted"],
 ];
 
+const capabilityGroups = [
+    {
+        title: "Level 2",
+        items: [
+            {
+                key: "starting",
+                label: "Start / Complete",
+            },
+        ],
+    },
+    {
+        title: "Level 1",
+        items: [
+            {
+                key: "pausing",
+                label: "Pause / Resume",
+            },
+        ],
+    },
+    {
+        title: "Level 3",
+        items: [
+            {
+                key: "holding",
+                label: "Hold",
+            },
+        ],
+    },
+    {
+        title: "Level 4",
+        items: [
+            {
+                key: "stopping",
+                label: "Stop",
+            },
+        ],
+    },
+    {
+        title: "Level 5",
+        items: [
+            {
+                key: "aborting",
+                label: "Abort",
+            },
+            {
+                key: "resetting",
+                label: "Reset",
+            },
+        ],
+    },
+];
+
+
+
 function StateNode(
     {
         label,
@@ -356,19 +410,22 @@ function TransitionLine({
 
 function RoutedTransition({
     points,
+    strokeWidth = 2,
 }: {
     points: string;
+    strokeWidth?: number;
 }) {
     return (
         <polyline
             points={points}
             fill="none"
             stroke="#607080"
-            strokeWidth="2"
+            strokeWidth={strokeWidth}
             markerEnd="url(#arrow)"
         />
     );
 }
+
 
 export default function ServiceDesigner() {
     const services = useEditorStore(
@@ -379,9 +436,18 @@ export default function ServiceDesigner() {
         (state) => state.activeEditor   
     );
 
+    const updateServiceTransition =
+        useEditorStore(
+            (state) => state.updateServiceTransition
+        );
+
     const service = services.find(
         (s) => s.id === activeEditor.id
     );
+
+    if (!service) {
+        return null;
+    }
 
     const stateGroups = [
         {
@@ -432,6 +498,44 @@ export default function ServiceDesigner() {
         },
     ];
 
+    const visibleStates = states.filter((state) => {
+        switch (state.id) {
+            case "starting":
+            case "completing":
+                return service.transitions.starting;
+
+            case "pausing":
+            case "paused":
+            case "resuming":
+                return service.transitions.pausing;
+
+            case "holding":
+            case "held":
+            case "unholding":
+                return service.transitions.holding;
+
+            case "stopping":
+            case "stopped":
+                return service.transitions.stopping;
+
+            case "aborting":
+            case "aborted":
+                return service.transitions.aborting;
+
+            case "resetting":
+                return service.transitions.resetting;
+
+            default:
+                return true;
+        }
+    });
+
+    const visibleTransitions = transitions.filter(
+        ([from, to]) =>
+            visibleStates.some((s) => s.id === from) &&
+            visibleStates.some((s) => s.id === to)
+    );
+
     return (
         <Box
             sx={{
@@ -472,6 +576,7 @@ export default function ServiceDesigner() {
                 }}
             >
                 {/* State Diagram */}
+
 
                 <Box
                     sx={{
@@ -549,7 +654,7 @@ export default function ServiceDesigner() {
 
                             {/* Existing horizontal transitions */}
 
-                            {transitions.map(([from, to]) => {
+                            {visibleTransitions.map(([from, to]) => {
                                 const source = getState(from);
                                 const target = getState(to);
 
@@ -595,121 +700,95 @@ export default function ServiceDesigner() {
 
                             {/* Routed transitions */}
 
-                            <RoutedTransition
-                                points="
-        450,174
-        450,220
-        450,258
-    "
-                            />
-                            <RoutedTransition
-                                points="
-        85,258
-        85,170
-    "
-                            />
+                            {/* Execute -> Hold */}
+                            {service.transitions.holding && (
+                                <RoutedTransition
+                                    points="450,174 450,220 450,238"
+                                    strokeWidth={2}
+                                />
+                            )}
 
-                            <RoutedTransition
-                                points="
-        220,388
-        85,388
-        85,258
-    "
-                            />
+                            {/*   Resetting -> Idle */}
+                            
+                                <RoutedTransition
+                                    points="85,290 85,170"
+                                    strokeWidth={2}
+                                />
+                            
 
-                            <RoutedTransition
-                                points="
-        220,488
-        85,488
-        85,258
-    "
-                            />
+                            {/* Stopped -> Resetting (Horizontal and Vertical both */}
+                            {service.transitions.stopping && (
+                                <RoutedTransition
+                                    points="220,388 85,388 85,288"
+                                    strokeWidth={2}
+                                />)}
 
-                            <line
-                                x1="85"
-                                y1="388"
-                                x2="220"
-                                y2="388"
-                                stroke="#607080"
-                                strokeWidth="2"
-                            />
+                            {/* Stopped -> Resetting only Arrow */}
+                            {service.transitions.stopping && (
+                                <line
+                                    x1="110"
+                                    y1="388"
+                                    x2="85"
+                                    y2="388"
+                                    stroke="#607080"
+                                    strokeWidth="2"
+                                    markerEnd="url(#arrow)"
+                                />)}
 
-                            <line
-                                x1="85"
-                                y1="488"
-                                x2="220"
-                                y2="488"
-                                stroke="#607080"
-                                strokeWidth="2"
-                            />
+                            {/* Aborted -> Resetting (horizontal line) */}
+                            {service.transitions.aborting && (
+                                <line
+                                    x1="220"
+                                    y1="488"
+                                    x2="85"
+                                    y2="488"
+                                    stroke="#607080"
+                                    strokeWidth="2"
+                                    markerEnd="url(#arrow)"
+                                />)}
 
-                            <line
-                                x1="85"
-                                y1="488"
-                                x2="85"
-                                y2="170"
-                                stroke="#607080"
-                                strokeWidth="2"
-                            />
-
-                            {/* Stopped -> Resetting */}
-                            <line
-                                x1="110"
-                                y1="388"
-                                x2="85"
-                                y2="388"
-                                stroke="#607080"
-                                strokeWidth="2"
-                                markerEnd="url(#arrow)"
-                            />
-
-                            {/* Aborted -> Resetting */}
-                            <line
-                                x1="110"
-                                y1="488"
-                                x2="85"
-                                y2="488"
-                                stroke="#607080"
-                                strokeWidth="2"
-                                markerEnd="url(#arrow)"
-                            />
-
-                            <line
-                                x1="85"
-                                y1="340"
-                                x2="85"
-                                y2="286"
-                                stroke="#607080"
-                                strokeWidth="2"
-                                markerEnd="url(#arrow)"
-                            />
+                            {/* Aborted -> Resetting  (vertical line) */}
+                            {service.transitions.aborting && (
+                                <line
+                                    x1="85"
+                                    y1="488"
+                                    x2="85"
+                                    y2="290"
+                                    stroke="#607080"
+                                    strokeWidth="2"
+                                    markerEnd="url(#arrow)"
+                                />)}
 
                             {/* Unholding -> Execute */}
-
-                            <line
-                                x1="290"
-                                y1="245"
-                                x2="445"
-                                y2="164"
-                                stroke="#607080"
-                                strokeWidth="2"
-                                markerEnd="url(#arrow)"
-                            />
+                            {service.transitions.holding && (
+                                <line
+                                    x1="290"
+                                    y1="245"
+                                    x2="445"
+                                    y2="164"
+                                    stroke="#607080"
+                                    strokeWidth="2"
+                                    markerEnd="url(#arrow)"
+                                />
+                            )}
 
                             {/* Execute -> Pausing */}
 
-                            <line
-                                x1="445"
-                                y1="120"
-                                x2="560"
-                                y2="85"
-                                stroke="#607080"
-                                strokeWidth="2"
-                                markerEnd="url(#arrow)"
-                            />
+                            {service.transitions.pausing && (
+                                <line
+                                    x1="445"
+                                    y1="120"
+                                    x2="560"
+                                    y2="85"
+                                    stroke="#607080"
+                                    strokeWidth="2"
+                                    markerEnd="url(#arrow)"
+                                />
+                            )}
 
                             {/* Resuming -> Execute */}
 
+                            {service.transitions.pausing && (
                             <line
                                 x1="325"
                                 y1="85"
@@ -718,23 +797,24 @@ export default function ServiceDesigner() {
                                 stroke="#607080"
                                 strokeWidth="2"
                                 markerEnd="url(#arrow)"
-                            />
+                                />)}
 
                             {/* to Holding */}
 
-                            <line
-                                x1="650"
-                                y1="210"
-                                x2="650"
-                                y2="260"
-                                stroke="#607080"
-                                strokeWidth="2"
-                                markerEnd="url(#arrow)"
-                            />
+                            {service.transitions.holding && (
+                                <line
+                                    x1="650"
+                                    y1="210"
+                                    x2="650"
+                                    y2="240"
+                                    stroke="#607080"
+                                    strokeWidth="2"
+                                    markerEnd="url(#arrow)"
+                                />)}
 
                         </svg>
 
-                        {states.map((state) => (
+                        {visibleStates.map((state) => (
                             <StateNode
                                 key={state.id}
                                 label={state.label}
@@ -750,40 +830,59 @@ export default function ServiceDesigner() {
 
                 {/* States and Transitions */}
 
+                {/* Capability Configuration */}
+
                 <Box
                     sx={{
                         width: 280,
                         display: "flex",
                         flexDirection: "column",
                         gap: 1,
+                        overflowY: "auto",
                     }}
                 >
-                    {stateGroups.map((group) => (
-                        <Box
-                            key={group.level}
+                    {capabilityGroups.map((group) => (
+                        <Paper
+                            key={group.title}
                             sx={{
-                                backgroundColor: group.color,
-                                border: "1px solid #ccc",
-                                p: 1,
-                                borderRadius: 1,
+                                p: 2,
                             }}
                         >
                             <Typography
                                 variant="subtitle2"
                                 sx={{ mb: 1 }}
                             >
-                                Level {group.level}
+                                {group.title}
                             </Typography>
 
-                            {group.states.map((state) => (
-                                <Typography
-                                    key={state}
-                                    variant="body2"
-                                >
-                                    • {state}
-                                </Typography>
+                            {group.items.map((item) => (
+                                <FormControlLabel
+                                    key={item.key}
+                                    control={
+                                        <Checkbox
+                                            checked={
+                                                service.transitions[
+                                                item.key as keyof typeof service.transitions
+                                                ]
+                                            }
+                                            onChange={(e) => {
+                                                console.log(
+                                                    item.key,
+                                                    e.target.checked
+                                                );
+
+                                                updateServiceTransition(
+                                                    service.id,
+                                                    item.key as keyof typeof service.transitions,
+                                                    e.target.checked
+                                                );
+                                            }}
+                                        />
+                                    }
+                                    label={item.label}
+                                />
                             ))}
-                        </Box>
+                        </Paper>
                     ))}
                 </Box>
             </Box>

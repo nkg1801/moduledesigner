@@ -4,7 +4,6 @@ import { ShapeModel } from "../types/Shape";
 import { shapeRegistry } from "../shapes/shapeRegistry";
 import { ConnectionModel } from "../types/Connection";
 import { PortModel } from "../types/Port";
-
 interface EditorState {
     shapes: ShapeModel[];
     connections: ConnectionModel[];
@@ -39,46 +38,40 @@ interface EditorState {
     selectService: (id: string | null) => void;
     selectedServiceStateId: string | null;
 
-    selectServiceState: (
-        id: string | null
-    ) => void;
+    selectServiceState: (id: string | null) => void;
 
     selectedEditor: {
         type: "hmi" | "service";
         id: string;
     };
 
-    openHmiEditor: (
-        id: string
-    ) => void;
-
-    openServiceEditor: (
-        id: string
-    ) => void;
-
+    openHmiEditor: (id: string) => void;
+    openServiceEditor: (id: string) => void;
     openEditors: EditorTab[];
-
     activeEditor: EditorTab;
 
     setActiveEditor: (
         tab: EditorTab
     ) => void;
 
-}
+    updateServiceTransition: (
+        serviceId: string,
+        transition: keyof ServiceModel["transitions"],
+        enabled: boolean
+    ) => void;
 
+}
 export interface HMIDocument {
     id: string;
     name: string;
     shapes: ShapeModel[];
     connections: ConnectionModel[];
 }
-
 export interface ServiceState {
     id: string;
     name: string;
     enabled: boolean;
 }
-
 export interface ServiceModel {
     id: string;
     name: string;
@@ -96,7 +89,6 @@ export interface ServiceModel {
         resetting: boolean;
     };
 }
-
 export interface ServiceParameter {
     id: string;
     name: string;
@@ -108,7 +100,6 @@ export interface ServiceParameter {
     unit?: string;
     procedure?: string;
 }
-
 export interface EditorTab {
     type: "hmi" | "service";
     id: string;
@@ -866,13 +857,10 @@ export const useEditorStore = create<EditorState>(
 
             set((state) => {
 
-                const updatedServices = [
-                    ...state.services,
+                const updatedServices = [...state.services,
                     {
                         id: crypto.randomUUID(),
-
                         name,
-
                         parameters: [],
 
                         transitions: {
@@ -991,6 +979,25 @@ export const useEditorStore = create<EditorState>(
         setActiveEditor: (editor) =>
             set(() => ({
                 activeEditor: editor,
+            })),
+
+        updateServiceTransition: (
+            serviceId,
+            transition,
+            enabled
+        ) =>
+            set((state) => ({
+                services: state.services.map((service) =>
+                    service.id === serviceId
+                        ? {
+                            ...service,
+                            transitions: {
+                                ...service.transitions,
+                                [transition]: enabled,
+                            },
+                        }
+                        : service
+                ),
             })),
     })
 );
