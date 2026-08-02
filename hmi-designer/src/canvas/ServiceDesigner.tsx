@@ -684,6 +684,54 @@ export default function ServiceDesigner() {
                                 markerEnd="url(#arrow)"
                             />
 
+                            {/* Unholding -> Execute */}
+
+                            <line
+                                x1="290"
+                                y1="245"
+                                x2="445"
+                                y2="164"
+                                stroke="#607080"
+                                strokeWidth="2"
+                                markerEnd="url(#arrow)"
+                            />
+
+                            {/* Execute -> Pausing */}
+
+                            <line
+                                x1="445"
+                                y1="120"
+                                x2="560"
+                                y2="85"
+                                stroke="#607080"
+                                strokeWidth="2"
+                                markerEnd="url(#arrow)"
+                            />
+
+                            {/* Resuming -> Execute */}
+
+                            <line
+                                x1="325"
+                                y1="85"
+                                x2="445"
+                                y2="120"
+                                stroke="#607080"
+                                strokeWidth="2"
+                                markerEnd="url(#arrow)"
+                            />
+
+                            {/* to Holding */}
+
+                            <line
+                                x1="650"
+                                y1="210"
+                                x2="650"
+                                y2="260"
+                                stroke="#607080"
+                                strokeWidth="2"
+                                markerEnd="url(#arrow)"
+                            />
+
                         </svg>
 
                         {states.map((state) => (

@@ -109,9 +109,11 @@ export default function PropertyInspector() {
 
                 <TextField
                     label="Name"
-                    value={selectedState.name}
-                    InputProps={{
-                        readOnly: true,
+                    value={name}
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                        },
                     }}
                 />
 
