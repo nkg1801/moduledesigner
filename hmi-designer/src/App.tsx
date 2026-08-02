@@ -14,9 +14,13 @@ import Tab from "@mui/material/Tab";
 import ServiceDesigner from "./canvas/ServiceDesigner";
 import Drawer from "@mui/material/Drawer";
 import SettingsIcon from "@mui/icons-material/Settings";
+import SaveIcon from "@mui/icons-material/Save";
+import OpenIcon from "@mui/icons-material/FileOpen";
+import NewFileIcon from "@mui/icons-material/CreateNewFolder";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import IconButton from "@mui/material/IconButton";
+import Divider from "@mui/material/Divider";
 
 function App() {
 
@@ -53,6 +57,29 @@ function App() {
     const isServiceEditor = activeEditor?.type === "service";
     const [showProperties, setShowProperties] = useState(false);
     const [showProjectExplorer, setShowProjectExplorer] = useState(true);
+
+    const saveProject = () => {
+        const project = {
+            version: "1.0",
+            hmis,
+            services
+        };
+
+        const json = JSON.stringify(project, null, 2);
+
+        const blob = new Blob([json], {
+            type: "application/json"
+        });
+
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "project.bhmi";
+        a.click();
+
+        URL.revokeObjectURL(url);
+    };
 
 
     useEffect(() => {
@@ -257,7 +284,6 @@ ${s.ports?.map(
                     borderBottom: "1px solid #ddd",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "space-between",
                     px: 2,
                     bgcolor: "#f5f5f5",
                 }}
@@ -266,21 +292,94 @@ ${s.ports?.map(
                     Module Designer for Freelance Engineering 2047
                 </Typography>
 
-                <Button
-                    variant="outlined"
-                    startIcon={<SettingsIcon />}
-                    onClick={() => setShowProperties(true)}
+                <Box
+                    sx={{
+                        ml: "auto",
+                        display: "flex",
+                        gap: 1,
+                    }}
                 >
-                    Properties
-                </Button>
 
-                <Button
-                    variant="contained"
-                    color="success"
-                    onClick={exportXml}
-                >
-                    Export MTP
-                </Button>
+                    <Button
+                        variant="outlined"
+                        startIcon={<NewFileIcon />}
+                        onClick={() => saveProject()}
+                    >
+                        New
+                    </Button>
+
+                    <Button
+                        variant="outlined"
+                        startIcon={<OpenIcon />}
+                        onClick={() => saveProject()}
+                    >
+                        Open
+                    </Button>
+
+                    <Button
+                        variant="outlined"
+                        startIcon={<SaveIcon />}
+                        onClick={() => saveProject()}
+                    >
+                        Save
+                    </Button>
+
+                    <Divider
+                    orientation="vertical"
+                    flexItem
+                    sx={{mx: 2,
+                            ml: "auto",
+                        }} />
+
+                    <Button
+                        variant="outlined"
+                        startIcon={<SettingsIcon />}
+                        onClick={() => setShowProperties(true)}
+                    >
+                        Properties
+                    </Button>
+
+                   
+
+                    <Divider
+                        orientation="vertical"
+                        flexItem
+                        sx={{
+                            mx: 2,
+                            ml: "auto",
+                        }} />
+
+                    <Button
+                        variant="contained"
+                        color="info"
+                        onClick={exportXml}
+                    >
+                        Error List
+                    </Button>
+
+                    <Divider
+                        orientation="vertical"
+                        flexItem
+                        sx={{
+                            mx: 2,
+                            ml: "auto",
+                        }} />
+                    <Button
+                        variant="contained"
+                        color="success"
+                        onClick={exportXml}
+                    >
+                        Freelance MTP Mapping
+                    </Button>
+
+                    <Button
+                        variant="contained"
+                        color="success"
+                        onClick={exportXml}
+                    >
+                        Export MTP
+                    </Button>
+                </Box>
             </Box>
 
             {/* Main Area */}
