@@ -6,7 +6,7 @@ import { Group } from "react-konva";
 import { useViewportStore } from "../store/viewportStore";
 import ConnectionLayer from "../components/ConnectionLayer";
 import { useRef, useEffect, useState } from "react";
-
+import Konva from "konva";
 export default function DesignerCanvas() {
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -41,45 +41,21 @@ export default function DesignerCanvas() {
     const setPosition = useViewportStore((s) => s.setPosition);
     //const [isPanning, setIsPanning] = useState(false);
     //const [lastPointer, setLastPointer] = useState<{x: number; y: number; } | null>(null);
-    const [isMouseDown, setIsMouseDown] = useState(false);
-    //const [spacePressed, setSpacePressed] = useState(false);
+    const [, setIsMouseDown] = useState(false);
+    const [, setSpacePressed] = useState(false);
 
-    const handleWheel = (e: any) => {
+    const handleWheel = (e: Konva.KonvaEventObject<WheelEvent>) => {
         e.evt.preventDefault();
-
         const stage = e.target.getStage();
-
         if (!stage) return;
-
         const pointer = stage.getPointerPosition();
-
         if (!pointer) return;
-
         const scaleBy = 1.1;
-
-        const newScale =
-            e.evt.deltaY > 0
-                ? scale / scaleBy
-                : scale * scaleBy;
-
-        const mousePointTo = {
-            x: (pointer.x - x) / scale,
-            y: (pointer.y - y) / scale,
-        };
-
-        const newPos = {
-            x:pointer.x -mousePointTo.x * newScale,
-            y:pointer.y -mousePointTo.y * newScale,
-        };
-
-        
-
+        const newScale = e.evt.deltaY > 0 ? scale / scaleBy : scale * scaleBy;
+        const mousePointTo = {x: (pointer.x - x) / scale,y: (pointer.y - y) / scale,};
+        const newPos = {x:pointer.x -mousePointTo.x * newScale,y:pointer.y -mousePointTo.y * newScale,};
         setScale(newScale);
-
-        setPosition(
-            newPos.x,
-            newPos.y
-        );
+        setPosition(newPos.x,newPos.y);
     };
 
     useEffect(() => {
@@ -196,16 +172,13 @@ export default function DesignerCanvas() {
                 onMouseDown={(e) => {
                     setIsMouseDown(true);
 
-                    if (
-                        e.target === e.target.getStage()
-                    ) {
+                    if (e.target === e.target.getStage()) {
                         clearSelection();
                     }
                 }}
             >
 
                 <Layer>
-
                     <Group
                         x={x}
                         y={y}

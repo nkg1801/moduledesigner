@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import { useEditorStore } from "../store/editorStore";
 
 export default function PropertyInspector() {
-    console.log("PropertyInspector rendered");
     const selectedShapeIds =
         useEditorStore(
             (state) => state.selectedShapeIds
@@ -120,8 +119,10 @@ export default function PropertyInspector() {
                 <TextField
                     label="State ID"
                     value={selectedState.id}
-                    InputProps={{
-                        readOnly: true,
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                        },
                     }}
                 />
 
@@ -130,8 +131,10 @@ export default function PropertyInspector() {
                     value={
                         selectedService?.name ?? ""
                     }
-                    InputProps={{
-                        readOnly: true,
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                        },
                     }}
                 />
             </Box>
@@ -154,16 +157,20 @@ export default function PropertyInspector() {
                 <TextField
                     label="Name"
                     value={selectedService.name}
-                    InputProps={{
-                        readOnly: true,
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                        },
                     }}
                 />
 
                 <TextField
                     label="ID"
                     value={selectedService.id}
-                    InputProps={{
-                        readOnly: true,
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                        },
                     }}
                 />
 
@@ -172,8 +179,10 @@ export default function PropertyInspector() {
                     value={
                         selectedService.states.length
                     }
-                    InputProps={{
-                        readOnly: true,
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                        },
                     }}
                 />
             </Box>
@@ -216,7 +225,37 @@ export default function PropertyInspector() {
                     label="Id"
                     size="small"
                     value={selectedHmi?.id ?? ""}
-                    InputProps={{readOnly: true,}}
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                        },
+                    }}
+                />
+
+                <TextField
+                    label="Width"
+                    size="small"
+                    value={
+                        selectedHmi?.connections.length ?? 0
+                    }
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                        },
+                    }}
+                />
+
+                <TextField
+                    label="Height"
+                    size="small"
+                    value={
+                        selectedHmi?.connections.length ?? 0
+                    }
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                        },
+                    }}
                 />
 
                 <TextField
@@ -225,7 +264,11 @@ export default function PropertyInspector() {
                     value={
                         selectedHmi?.shapes.length ?? 0
                     }
-                    InputProps={{readOnly: true,}}
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                        },
+                    }}
                 />
 
                 <TextField
@@ -234,7 +277,11 @@ export default function PropertyInspector() {
                     value={
                         selectedHmi?.connections.length ?? 0
                     }
-                    InputProps={{readOnly: true,}}
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                        },
+                    }}
                 />
             </Box>
         );
@@ -270,17 +317,23 @@ export default function PropertyInspector() {
                     }
                     sx={{ flex: 2 }}
                 />
+                </Box>
+                <Box>
 
                 <TextField
                     label="Type"
                     size="small"
                     value={selectedShape.type}
-                    InputProps={{
-                        readOnly: true,
+                    slotProps={{
+                        input: {
+                            readOnly: true,
+                        },
                     }}
                     sx={{ flex: 1 }}
                 />
 
+                </Box>
+                <Box>
                 <TextField
                     label="eClass ID"
                     size="small"
@@ -344,6 +397,16 @@ export default function PropertyInspector() {
                     sx={{ flex: 1 }}
                 />
 
+            </Box>
+
+            <Box
+                sx={{
+                    display: "flex",
+                    gap: 1,
+                    mt: 1,
+                }}
+            >
+
                 <TextField
                     label="Width"
                     size="small"
@@ -385,6 +448,47 @@ export default function PropertyInspector() {
                 />
             </Box>
 
+            <Box>
+                <TextField
+                    label="Rotation"
+                    size="small"
+                    type="number"
+                    value={selectedShape.eClassId ?? 0}
+                    onChange={(e) =>
+                        updateShapeProperties(
+                            selectedShape.id,
+                            {
+                                eClassId:
+                                    Number(
+                                        e.target.value
+                                    ) || 0,
+                            }
+                        )
+                    }
+                    sx={{ flex: 1 }}
+                />
+            </Box>
+
+            <Box>
+                <TextField
+                    label="ZIndex"
+                    size="small"
+                    type="number"
+                    value={selectedShape.eClassId ?? 0}
+                    onChange={(e) =>
+                        updateShapeProperties(
+                            selectedShape.id,
+                            {
+                                eClassId:
+                                    Number(
+                                        e.target.value
+                                    ) || 0,
+                            }
+                        )
+                    }
+                    sx={{ flex: 1 }}
+                />
+            </Box>
         </Box>
     );
 }

@@ -116,9 +116,6 @@ export type ShapeType =
     | "pressureTransmitter"
     | "temperatureTransmitter"
     | "column"
-    | "rectangle"
-    | "circle"
-    | "tank"
     | "controlValve"
     | "checkValve"
     | "blockValve"
@@ -362,7 +359,7 @@ export const useEditorStore = create<EditorState>(
                     y,
                     width: definition.width,
                     height: definition.height,
-                    fill: definition.fill,
+                    //fill: definition.fill,
                     ports,
                 };
 
@@ -867,8 +864,8 @@ export const useEditorStore = create<EditorState>(
                             starting: true,
                             pausing: true,
                             holding: true,
-                            stopping: false,
-                            aborting: false,
+                            stopping: true,
+                            aborting: true,
                             resetting: true,
                         },
 

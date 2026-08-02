@@ -7,9 +7,6 @@ export interface ShapeModel {
     type:
     | "analogIndicator"
     | "column"
-    | "rectangle"
-    | "circle"
-    | "tank"
     | "controlValve"
     | "checkValve"
     | "blockValve"

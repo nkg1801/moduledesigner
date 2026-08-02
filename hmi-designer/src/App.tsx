@@ -14,14 +14,12 @@ import Tab from "@mui/material/Tab";
 import ServiceDesigner from "./canvas/ServiceDesigner";
 import Drawer from "@mui/material/Drawer";
 import SettingsIcon from "@mui/icons-material/Settings";
-import FolderIcon from "@mui/icons-material/Folder";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import IconButton from "@mui/material/IconButton";
 
 function App() {
 
-    const selectedShapeIds = useEditorStore((state) => state.selectedShapeIds);
     const addConnection = useEditorStore((state) => state.addConnection);
     const selectedPortIds = useEditorStore((state) => state.selectedPortIds);
     const deleteSelectedConnection = useEditorStore((state) => state.deleteSelectedConnection);
@@ -41,25 +39,10 @@ function App() {
             );
         });
 
-    const connections =
-        useEditorStore((state) => {
 
-            const currentHmi =
-                state.hmis.find(
-                    (hmi) =>
-                        hmi.id ===
-                        state.selectedHmiId
-                );
 
-            return (
-                currentHmi?.connections ?? []
-            );
-        });
-
-    const selectedShape = shapes.find((shape) => selectedShapeIds.includes(shape.id));
     const clearSelectedPorts = useEditorStore((state) => state.clearSelectedPorts);
     const hmis = useEditorStore((state) => state.hmis);
-    const selectedHmiId = useEditorStore((state) => state.selectedHmiId);
     const selectHmi = useEditorStore((state) => state.selectHmi);
     const addHmi = useEditorStore((state) => state.addHmi);
     const openEditors = useEditorStore((state) => state.openEditors);
@@ -498,7 +481,6 @@ ${s.ports?.map(
                                 minWidth: 0,
                                 minHeight: 0,
                                 bgcolor: "#fafafa",
-                                border: "4px solid blue",
                             }}
                         >
                             {activeEditor.type === "service"
@@ -519,7 +501,9 @@ ${s.ports?.map(
                                 <Box
                                     sx={{
                                         width: 250,
+                                        height: "100%",
                                         p: 2,
+                                        bgcolor: "#fafadd",
                                     }}
                                 >
                                     <PropertyInspector />

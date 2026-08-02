@@ -1,7 +1,4 @@
-//import DesignerRect from "./DesignerRect";
-//import DesignerCircle from "./DesignerCircle";
 import { ShapeModel } from "../types/Shape";
-//import DesignerTank from "./DesignerTank";
 import DesignerImageSymbol from "./DesignerImageSymbol";
 
 interface Props {
@@ -10,20 +7,6 @@ interface Props {
 
 export default function ShapeRenderer({shape,}: Props) {
     switch (shape.type) {
-        /*case "circle":
-            return (
-                <DesignerCircle
-                    shape={shape}
-                />
-            );
-
-        case "tank":
-            return (
-                <DesignerTank
-                    shape={shape}
-                />
-            );*/
-
         case "column":
         case "heatExchanger":
         case "reactor":

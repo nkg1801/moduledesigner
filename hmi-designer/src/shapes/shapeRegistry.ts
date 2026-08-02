@@ -103,15 +103,6 @@ export const shapeRegistry = {
         ports: 2,
         eClassId: 123463, //todo: Example eClassId, replace with actual value
     },
-    /*circle: {
-        displayName: "Circle",
-        amlType: "InternalElement",
-        refBaseSystemUnitPath: "MTPHMISUCLib/VisualObject",
-        width: 100,
-        height: 100,
-        fill: "#ef6c00",
-        ports: 1,
-    },*/
 
     //Controllers
 
@@ -255,24 +246,4 @@ export const shapeRegistry = {
     //Interlocks
 
     //Contant
-
-    /*rectangle: {
-        displayName: "Rectangle",
-        amlType: "InternalElement",
-        refBaseSystemUnitPath: "MTPHMISUCLib/VisualObject",
-        width: 150,
-        height: 100,
-        fill: "#1976d2",
-        ports: 1,
-    },*/
-
-    /*tank: {
-        displayName: "Tank",
-        amlType: "InternalElement",
-        refBaseSystemUnitPath: "MTPHMISUCLib/VisualObject",
-        width: 120,
-        height: 160,
-        fill: "#4caf50",
-        ports: 2,
-    },*/
 };

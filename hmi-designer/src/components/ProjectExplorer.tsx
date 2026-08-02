@@ -138,15 +138,14 @@ export default function ProjectExplorer() {
 						const name = prompt("Service Name");
 						if (name && name.trim()) {
 							addService(name.trim());
-							console.log("services count", services.length, services);
 						}
 					}}
 
-					onDoubleClick={() => {
+					/*onDoubleClick={() => {
 						openServiceEditor(
 							service.id
 						);
-					}}
+					}}*/
 				>
 					▼ Services
 				</Typography>

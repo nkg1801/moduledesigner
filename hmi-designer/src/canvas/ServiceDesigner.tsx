@@ -2,7 +2,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
 import Paper from "@mui/material/Paper";
 import { useEditorStore } from "../store/editorStore";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -12,7 +11,6 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import StopIcon from "@mui/icons-material/Stop";
 import CloseIcon from "@mui/icons-material/Close";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
-import FastForwardIcon from "@mui/icons-material/FastForward";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
 
 const states = [
@@ -151,16 +149,6 @@ const states = [
     },
 ];
 
-const level2States = [
-    "starting",
-    "execute",
-    "completing",
-    "resuming",
-    "paused",
-    "pausing",
-    "unholding",
-];
-
 const labels = [
     { text: "", x: 190, y: 135 }, //START
     { text: "", x: 630, y: 135 }, //COMPLETE
@@ -169,53 +157,8 @@ const labels = [
     { text: "", x: 320, y: 480 }, //ABORT
 ];
 
-const holdTransitions = level2States.map(
-    state => ({
-        from: state,
-        to: "holding",
-    })
-);
-
 const getState = (id: string) =>
     states.find((s) => s.id === id);
-
-const stateCapabilities = {
-    hold: [
-        "starting",
-        "execute",
-        "completing",
-        "resuming",
-        "paused",
-        "pausing",
-        "unholding",
-    ],
-
-    stop: [
-        "starting",
-        "execute",
-        "completing",
-        "resuming",
-        "paused",
-        "pausing",
-        "unholding",
-        "holding",
-        "held",
-    ],
-
-    abort: [
-        "starting",
-        "execute",
-        "completing",
-        "resuming",
-        "paused",
-        "pausing",
-        "unholding",
-        "holding",
-        "held",
-        "stopping",
-        "stopped",
-    ],
-};
 
 const transitions = [
     // Main flow
@@ -237,39 +180,6 @@ const transitions = [
 
     // Abort flow
     ["aborting", "aborted"],
-];
-
-const horizontalTransitions = [
-    ["idle", "starting"],
-    ["starting", "execute"],
-    ["execute", "completing"],
-    ["completing", "completed"],
-
-    ["resuming", "paused"],
-    ["paused", "pausing"],
-
-    ["unholding", "held"],
-    ["held", "holding"],
-
-    ["stopped", "stopping"],
-    ["aborted", "aborting"],
-];
-
-const routedTransitions = [
-    ["resuming", "execute"],
-    ["pausing", "execute"],
-
-    ["execute", "unholding"],
-
-    ["holding", "stopping"],
-
-    ["stopping", "aborting"],
-
-    ["resetting", "idle"],
-    ["resetting", "stopped"],
-    ["resetting", "aborted"],
-
-    ["completed", "aborted"],
 ];
 
 const capabilityGroups = [
@@ -323,8 +233,6 @@ const capabilityGroups = [
         ],
     },
 ];
-
-
 
 function StateNode(
     {
@@ -381,7 +289,6 @@ function StateNode(
         </Paper>
     );
 }
-
 function TransitionLine({
     x1,
     y1,
@@ -448,55 +355,6 @@ export default function ServiceDesigner() {
     if (!service) {
         return null;
     }
-
-    const stateGroups = [
-        {
-            level: 1,
-            color: "#fff3cd",
-            states: [
-                "Execute",
-                "Pausing",
-                "Paused",
-                "Resuming",
-            ],
-        },
-        {
-            level: 2,
-            color: "#d1ecf1",
-            states: [
-                "Starting",
-                "Completing",
-                "Unholding",
-            ],
-        },
-        {
-            level: 3,
-            color: "#d4edda",
-            states: [
-                "Holding",
-                "Held",
-            ],
-        },
-        {
-            level: 4,
-            color: "#ffe5d0",
-            states: [
-                "Stopping",
-                "Stopped",
-            ],
-        },
-        {
-            level: 5,
-            color: "#f8d7da",
-            states: [
-                "Idle",
-                "Completed",
-                "Resetting",
-                "Aborting",
-                "Aborted",
-            ],
-        },
-    ];
 
     const visibleStates = states.filter((state) => {
         switch (state.id) {

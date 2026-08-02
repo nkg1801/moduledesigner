@@ -43,9 +43,7 @@ export default function ShapePalette() {
                                 minHeight: 36,
                             }}
                         >
-                            <Typography
-                                fontWeight="bold"
-                            >
+                            <Typography>
                                 {category.title}
                             </Typography>
                         </AccordionSummary>
