@@ -268,9 +268,6 @@ ${s.ports?.map(
         >
             {/* Toolbar */}
 
-           
-
-
             <Box
                 sx={{
                     height: 48,
@@ -501,6 +498,7 @@ ${s.ports?.map(
                                 minWidth: 0,
                                 minHeight: 0,
                                 bgcolor: "#fafafa",
+                                border: "4px solid blue",
                             }}
                         >
                             {activeEditor.type === "service"

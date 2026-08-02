@@ -1,16 +1,20 @@
 import { Stage, Layer } from "react-konva";
-
 import { useEditorStore } from "../store/editorStore";
 import GridLayer from "./GridLayer";
 import ShapeRenderer from "../components/ShapeRenderer";
 import { Group } from "react-konva";
 import { useViewportStore } from "../store/viewportStore";
-import { useEffect, useState } from "react";
 import ConnectionLayer from "../components/ConnectionLayer";
-
+import { useRef, useEffect, useState } from "react";
 
 export default function DesignerCanvas() {
 
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const [size, setSize] = useState({
+        width: 0,
+        height: 0,
+    });
 
     const shapes =
         useEditorStore((state) => {
@@ -64,14 +68,11 @@ export default function DesignerCanvas() {
         };
 
         const newPos = {
-            x:
-                pointer.x -
-                mousePointTo.x * newScale,
-
-            y:
-                pointer.y -
-                mousePointTo.y * newScale,
+            x:pointer.x -mousePointTo.x * newScale,
+            y:pointer.y -mousePointTo.y * newScale,
         };
+
+        
 
         setScale(newScale);
 
@@ -117,9 +118,37 @@ export default function DesignerCanvas() {
         };
     }, []);
 
+    useEffect(() => {
+        if (!containerRef.current) {
+            return;
+        }
+
+        const observer = new ResizeObserver(() => {
+            if (!containerRef.current) {
+                return;
+            }
+
+            setSize({
+                width: containerRef.current.clientWidth,
+                height: containerRef.current.clientHeight,
+            });
+        });
+
+        observer.observe(containerRef.current);
+
+        return () => observer.disconnect();
+    }, []);
+
 
     return (
         <div
+            ref={containerRef}
+                style = {{
+                    width: "100%",
+                    height: "100%",
+                    flex: 1,
+                }
+            }
             onDragOver={(e) =>
                 e.preventDefault()
             }
@@ -135,9 +164,6 @@ export default function DesignerCanvas() {
                     type as
                     | "analogIndicator"
                     | "column"
-                    //| "rectangle"
-                    //| "circle"
-                    //| "tank"
                     | "controlValve"
                     | "checkValve"
                     | "blockValve"
@@ -163,9 +189,8 @@ export default function DesignerCanvas() {
         >
 
             <Stage
-                // canvas width and height are set to the window size minus some offset for UI elements
-                width={window.innerWidth - 950}
-                height={window.innerHeight - 120}
+                width={size.width}
+                height={size.height}
                 onWheel={handleWheel}
 
                 onMouseDown={(e) => {
