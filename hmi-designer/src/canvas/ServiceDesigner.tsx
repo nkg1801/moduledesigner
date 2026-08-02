@@ -12,6 +12,15 @@ import StopIcon from "@mui/icons-material/Stop";
 import CloseIcon from "@mui/icons-material/Close";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import { useState } from "react";
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Button,
+    
+} from "@mui/material";
 
 const states = [
     {
@@ -184,6 +193,16 @@ const transitions = [
 
 const capabilityGroups = [
     {
+        title: "Level 1",
+        items: [
+            {
+                key: "pausing",
+                label: "Pausing - Paused - Resuming",
+            },
+        ],
+    },
+
+    {
         title: "Level 2",
         items: [
             {
@@ -192,15 +211,7 @@ const capabilityGroups = [
             },
         ],
     },
-    {
-        title: "Level 1",
-        items: [
-            {
-                key: "pausing",
-                label: "Pause / Resume",
-            },
-        ],
-    },
+    
     {
         title: "Level 3",
         items: [
@@ -352,6 +363,8 @@ export default function ServiceDesigner() {
         (s) => s.id === activeEditor.id
     );
 
+    const [showImportantNote, setShowImportantNote] = useState(false);
+
     if (!service) {
         return null;
     }
@@ -395,6 +408,7 @@ export default function ServiceDesigner() {
     );
 
     return (
+        <>
         <Box
             sx={{
                 flex: 1,
@@ -699,6 +713,20 @@ export default function ServiceDesigner() {
                         overflowY: "auto",
                     }}
                 >
+                    <Typography
+                        variant="subtitle2"
+                        onClick={() => setShowImportantNote(true)}
+                        sx={{
+                            mb: 1,
+                            color: "red",
+                            fontWeight: "bold",
+                            cursor: "pointer",
+                            textDecoration: "underline",
+                        }}
+                    >
+                        Important Note
+                    </Typography>
+
                     {capabilityGroups.map((group) => (
                         <Paper
                             key={group.title}
@@ -710,7 +738,8 @@ export default function ServiceDesigner() {
                                 variant="subtitle2"
                                 sx={{ mb: 1 }}
                             >
-                                {group.title}
+                                
+                                {/* {group.title} */}
                             </Typography>
 
                             {group.items.map((item) => (
@@ -724,11 +753,6 @@ export default function ServiceDesigner() {
                                                 ]
                                             }
                                             onChange={(e) => {
-                                                console.log(
-                                                    item.key,
-                                                    e.target.checked
-                                                );
-
                                                 updateServiceTransition(
                                                     service.id,
                                                     item.key as keyof typeof service.transitions,
@@ -743,7 +767,32 @@ export default function ServiceDesigner() {
                         </Paper>
                     ))}
                 </Box>
+
             </Box>
+
+                <Dialog
+                    open={showImportantNote}
+                    onClose={() => setShowImportantNote(false)}
+                    maxWidth="sm"
+                    fullWidth
+                >
+                    <DialogTitle>Important Note</DialogTitle>
+
+                    <DialogContent>
+                        <Typography>
+                            Configure the states and transitions before editing the state logic! In case you configure it afterwards, this can cause data loss due to states that will get deleted immediately.
+                        </Typography>
+                    </DialogContent>
+
+                    <DialogActions>
+                        <Button onClick={() => setShowImportantNote(false)}>
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
         </Box>
+        </>
+
     );
 }
